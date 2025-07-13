@@ -12,6 +12,7 @@ from typing import Dict, Any, Optional
 import re
 import psutil
 
+from playwright_stealth import Stealth
 from bs4 import BeautifulSoup
 import httpx
 import numpy as np
@@ -20,41 +21,6 @@ from scipy.interpolate import PchipInterpolator
 
 # Import the separated solver class
 from recaptcha_solver import RecaptchaAudioSolver
-
-# --- FOR EMAIL GEN ---
-# These are external API constants for Addy.io
-ADDY_API_URL = "https://app.addy.io/api/v1/aliases"
-ADDY_COOKIES = {
-    'XSRF-TOKEN': 'eyJpdiI6InhCTXNtN3VrYkI4S0VGNldqdFpJRkE9PSIsInZhbHVlIjoibGUxbStJaktXdGRZbGduTWl2K0xoQ2VVbmhEYnNVMnQwN244M0I3N1N1Ykw4MW1KNlk2THVqWDgxQmhEcXc1RTFmZnVSWUYzOFA5YW9SbnJ0UzllZUlEMkM3S2ZUbDRCRUdyQnd1T1ArakFkTXdFNGwyZFdIQXArZHRBN0NlYk8iLCJtYWMiOiIxYzRlZjhkZmUzNzYzMDNiYWFmODQ4MmRiZDQ5NThmOWQxMzRkYzFmZmM1Y2JhMGVjZjNjNDc1YjhjMDZjOTI5IiwidGFnIjoiIn0%3D',
-    'AnonAddy': 'eyJpdiI6ImZ0NFpnZUV0M0wrNjlTQjJGbENNd2c9PSIsInZhbHVlIjoiN1RrZHRLU3VnWU5DU1B0VjBUNFcrblFFY3dFTk5Pb3ZaOW5YWkZNZGRsQjJtUzdrdEtuNzRKcnl2TDFuN0R6OXlncWNMV3FZcE5xb0hJSlNjUzc0NWJyRUpDVlh4Q0V0VW1SRDZvdXRrbkl0ZVowNWZqZGNaQnVzUEQ3azBRekEiLCJtYWMiOiJiMzljNzk2MDlkM2MyZWNhOTgxNGUxMzE3NzE5MWE0ZmEyNDhlOWMzYjNlNDdhOWQ0ZjEzZmZkNzIzMGU4ODlhIiwidGFnIjoiIn0%3D',
-}
-
-ADDY_HEADERS = {
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'en-US,en;q=0.9',
-    'content-type': 'application/json',
-    'origin': 'https://app.addy.io',
-    'priority': 'u=1, i',
-    'referer': 'https://app.addy.io/aliases',
-    'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-origin',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
-    'x-requested-with': 'XMLHttpRequest',
-    'x-xsrf-token': 'eyJpdiI6InhCTXNtN3VrYkI4S0VGNldqdFpJRkE9PSIsInZhbHVlIjoibGUxbStJaktXdGRZbGduTWl2K0xoQ2VVbmhEYnNVMnQwN244M0I3N1N1Ykw4MW1KNlk2THVqWDgxQmhEcXc1RTFmZnVSWUYzOFA5YW9SbnJ0UzllZUlEMkM3S2ZUbDRCRUdyQnd1T1ArakFkTXdFNGwyZFdIQXArZHRBN0NlYk8iLCJtYWMiOiIxYzRlZjhkZmUzNzYzMDNiYWFmODQ4MmRiZDQ5NThmOWQxMzRkYzFmZmM1Y2JhMGVjZjNjNDc1YjhjMDZjOTI5IiwidGFnIjoiIn0=',
-}
-
-ADDY_JSON_DATA = {
-    'domain': 'anonaddy.me',
-    'local_part': '',
-    'description': '',
-    'format': 'uuid',
-    'recipient_ids': [],
-}
-# --- FOR EMAIL GEN ---
 
 # --- Configuration ---
 USER_AGENTS = [
@@ -67,6 +33,16 @@ class WebshareRegisterer:
     A class to automate the registration process on Webshare.io,
     including email generation and reCAPTCHA solving.
     """
+    WEBSHARE_PROXY_HEADERS = {
+        'authorization': 'Token %token%',
+    }
+
+    WEBSHARE_PROXY_PARAMS = {
+        'mode': 'direct',
+        'page': '1',
+        'page_size': '10',
+    }
+    WEBSHARE_REGISTER_API_URL = "https://proxy.webshare.io/api/v2/register/"
     WEBSSHARE_REGISTER_URL = "https://dashboard.webshare.io/register/"
     WEBSSHARE_PROXY_LIST_URL = "https://proxy.webshare.io/api/v2/proxy/list/?mode=direct&page=1&page_size=10"
     _email_generation_lock = asyncio.Lock()
@@ -85,6 +61,7 @@ class WebshareRegisterer:
         self.verbose = verbose
         self.SET_SECOND = False
         self._event_close = asyncio.Event()
+        self._event_request_catched = asyncio.Future()
         self.logger = logging.getLogger(f"{self.__class__.__name__}_{id(self)}")
         self.logger.propagate = False
         if not self.logger.handlers:
@@ -93,7 +70,6 @@ class WebshareRegisterer:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
         self.logger.setLevel(logging.INFO if verbose else logging.WARNING)
-        
         self.WEBSHARE_PROXY_PAGE = "https://dashboard.webshare.io/proxy/list?authenticationMethod=%22username_password%22&connectionMethod=%22direct%22&proxyControl=%220%22&rowsPerPage=10&page=0&order=%22asc%22&orderBy=null&searchValue=%22%22&removeType=%22refresh_all%22"
         self._browser: Optional[BrowserContext] = None
         self._context: Optional[BrowserContext] = None
@@ -106,31 +82,64 @@ class WebshareRegisterer:
 
     async def _human_like_mouse_move(self, page: Page, locator: Locator, start_x: float, start_y: float) -> tuple[float, float]:
         try:
+            # 1. Simulate human reaction delay
+            await asyncio.sleep(random.uniform(0.2, 0.6))
+
             box = await locator.bounding_box()
             if not box:
                 self.logger.warning("Could not get bounding box for mouse move.")
                 return start_x, start_y
 
-            end_x = box['x'] + box['width'] * random.uniform(0.2, 0.8)
-            end_y = box['y'] + box['height'] * random.uniform(0.2, 0.8)
-            dist = math.hypot(end_x - start_x, end_y - start_y)
-            num_points = max(5, int(dist / 100))
-            x_points = np.linspace(start_x, end_x, num=num_points)
-            y_points = np.linspace(start_y, end_y, num=num_points)
+            # 2. Choose random target location inside element
+            target_x = box['x'] + box['width'] * random.uniform(0.2, 0.8)
+            target_y = box['y'] + box['height'] * random.uniform(0.2, 0.8)
+
+            # 3. Optional overshoot
+            overshoot_chance = 0.3
+            if random.random() < overshoot_chance:
+                overshoot_x = target_x + random.uniform(-10, 10)
+                overshoot_y = target_y + random.uniform(-10, 10)
+            else:
+                overshoot_x, overshoot_y = target_x, target_y
+
+            # 4. Build path with jitter and curvature
+            dist = math.hypot(overshoot_x - start_x, overshoot_y - start_y)
+            num_points = max(6, int(dist / 80))
+            x_points = np.linspace(start_x, overshoot_x, num=num_points)
+            y_points = np.linspace(start_y, overshoot_y, num=num_points)
+
             if num_points > 2:
-                offset_boundary = max(10, dist * 0.1)
+                offset_boundary = max(5, dist * 0.05)
                 x_points[1:-1] += np.random.uniform(-offset_boundary, offset_boundary, num_points - 2)
                 y_points[1:-1] += np.random.uniform(-offset_boundary, offset_boundary, num_points - 2)
+
             interp_x = PchipInterpolator(np.arange(num_points), x_points)
             interp_y = PchipInterpolator(np.arange(num_points), y_points)
-            steps = max(15, int(dist / random.uniform(15, 25)))
+
+            # 5. Ease-in, ease-out movement
+            steps = max(15, int(dist / random.uniform(10, 20)))
+            ease = lambda t: t * t * (3 - 2 * t)  # smoothstep function
+
             final_x, final_y = start_x, start_y
             for i in range(1, steps + 1):
-                t = (i / steps) * (num_points - 1)
-                final_x, final_y = interp_x(t), interp_y(t)
+                t = ease(i / steps) * (num_points - 1)
+                jitter_x = random.uniform(-1.2, 1.2)
+                jitter_y = random.uniform(-1.2, 1.2)
+                final_x = interp_x(t) + jitter_x
+                final_y = interp_y(t) + jitter_y
                 await page.mouse.move(float(final_x), float(final_y))
-                await asyncio.sleep(random.uniform(0.002, 0.008))
-            return float(final_x), float(final_y)
+                await asyncio.sleep(random.uniform(0.005, 0.015))
+
+            # 6. Final correction if overshoot happened
+            if (overshoot_x, overshoot_y) != (target_x, target_y):
+                await asyncio.sleep(random.uniform(0.1, 0.3))
+                await page.mouse.move(float(target_x), float(target_y))
+
+            # 7. Optional hover pause
+            await asyncio.sleep(random.uniform(0.05, 0.2))
+
+            return float(target_x), float(target_y)
+
         except Exception as e:
             self.logger.warning(f"Could not perform human-like mouse move: {e}")
             return start_x, start_y
@@ -204,31 +213,105 @@ class WebshareRegisterer:
                 raise RuntimeError("Recaptcha has blocked this IP or browser profile.")
             return False
 
-    async def _handle_response_listener(self, response):
-        if self.WEBSSHARE_PROXY_LIST_URL.split('?')[0] in response.url:
-            self.logger.info(f"⬅️ Captured Proxy List Response: {response.url}")
-            try:
-                json_body = await response.json()
-                data = []
-                if os.path.exists(self.proxy_file_path):
-                    with open(self.proxy_file_path, "r") as f:
-                        try:
-                            existing_data = json.load(f)
-                            if isinstance(existing_data, list):
-                                data.extend(existing_data)
-                        except json.JSONDecodeError: pass
-                data.append(json_body)
-                with open(self.proxy_file_path, "w") as f:
-                    json.dump(data, f, indent=2)
-                self.logger.info(f"Saved {len(json_body.get('data', []))} proxies to {self.proxy_file_path}")
+    async def start_routing(self):
+        await self._page.route(
+            "**/*",
+            lambda route, request: asyncio.create_task(self._handle_request_listener(route, request))
+        )
+    
+    async def manual_register(self, post_data: str):
+        max_retries = 3
+        proxy_url = f"http://{self.proxy_details['username']}:{self.proxy_details['password']}@{self.proxy_details['server'].split('://')[1]}"
 
-                if self.SET_SECOND:
-                    self.logger.info("Second proxy list fetched. Closing.")
-                    self._event_close.set()
+        for attempt in range(1, max_retries + 1):
+            try:
+                async with httpx.AsyncClient(timeout=20, proxy=proxy_url) as client:
+                    response = await client.post(
+                        self.WEBSHARE_REGISTER_API_URL,
+                        json=json.loads(post_data),
+                        headers={"user-agent": random.choice(USER_AGENTS)},
+                        follow_redirects=True,
+                    )
+                    
+                    try:
+                        response.raise_for_status()
+                    except httpx.HTTPStatusError as e:
+                        self.logger.error(f"HTTP error on register attempt {attempt}: {e.response.status_code} - {e.response.text}")
+                        raise  # re-raise after logging
+                    
+                    if response.status_code == 200:
+                        json_data = response.json()
+                        self.token = json_data.get('token')
+                        self.logger.info(f"Registration successful, token: {self.token}")
+                    else:
+                        self.logger.warning(f"Unexpected status code on register attempt {attempt}: {response.status_code}")
+                        return False
+
+                    self.WEBSHARE_PROXY_HEADERS['authorization'] = self.WEBSHARE_PROXY_HEADERS['authorization'].replace("%token%", self.token)
+                    self.WEBSHARE_PROXY_HEADERS['User-Agent'] = random.choice(USER_AGENTS)
+
+                    response = await client.get(
+                        url=self.WEBSSHARE_PROXY_LIST_URL,
+                        params=self.WEBSHARE_PROXY_PARAMS,
+                        headers=self.WEBSHARE_PROXY_HEADERS,
+                        follow_redirects=True,
+                    )
+
+                    self.logger.info(f"Proxy list fetch status: {response.status_code}")
+                    self.logger.info(f"Proxy list response text: {response.text}")
+                    json_body = response.json()
+                    data = []
+                    if os.path.exists(self.proxy_file_path):
+                        with open(self.proxy_file_path, "r") as f:
+                            try:
+                                existing_data = json.load(f)
+                                if isinstance(existing_data, list):
+                                    data.extend(existing_data)
+                            except json.JSONDecodeError: pass
+                    data.append(json_body)
+                    with open(self.proxy_file_path, "w") as f:
+                        json.dump(data, f, indent=2)
+                    self.logger.info(f"Saved {len(json_body.get('data', []))} proxies to {self.proxy_file_path}")
+
+                    if self.SET_SECOND:
+                        self.logger.info("Second proxy list fetched. Closing.")
+                        self._event_close.set()
+                    else:
+                        self.SET_SECOND = True
+                    return True
+            
+            except (httpx.HTTPStatusError, httpx.RequestError, httpx.ReadTimeout) as e:
+                self.logger.error(f"Attempt {attempt} failed with error: {e}")
+                if attempt == max_retries:
+                    self.logger.error("Max retries reached. Giving up.")
+                    return False
                 else:
-                    self.SET_SECOND = True
-            except Exception as e:
-                self.logger.warning(f"❌ Failed to parse proxy response: {e}")
+                    backoff = 2 ** attempt
+                    self.logger.info(f"Retrying in {backoff} seconds...")
+                    await asyncio.sleep(backoff)
+
+    async def _handle_request_listener(self,route, request):
+        try:
+            if request.url == self.WEBSHARE_REGISTER_API_URL and request.method == "POST":
+                # print(f"URL: {request.url}")
+                # print(f"Method: {request.method}")
+                # print("Headers:", request.headers)
+                try:
+                    post_data = request.post_data
+                    if post_data:
+                        print("Post Data:", post_data)
+                    else:
+                        print("No Post Data")
+                    
+                    await route.abort()
+                    self._event_request_catched.set_result(post_data)
+
+                except Exception as e:
+                    print("Error accessing post data:", e)
+            else:
+                await route.continue_()
+        except Exception as e:
+            print("Error processing request:", e)
 
     @staticmethod
     def hide_windows_by_pid(target_pids, logger):
@@ -253,19 +336,75 @@ class WebshareRegisterer:
             password = "bangbang!"
 
             self.logger.info(f"Starting Webshare registration for Email: {email}")
-            async with async_playwright() as p:
-                self._browser = await p.chromium.launch(headless=self.headless, proxy=self.proxy_details)
+            async with Stealth().use_async(async_playwright()) as p:
+                self._browser = await p.chromium.launch(headless=self.headless)
+    
                 self._context = await self._browser.new_context(
                     user_agent=random.choice(USER_AGENTS),
                     viewport={'width': 1920, 'height': 1080},
                     locale="en-US",
+                    java_script_enabled=True,
                 )
-                await self._context.add_init_script("Object.defineProperty(navigator, 'webdriver', { get: () => false });")
+                
+                # Add anti-detection scripts on new pages
+                self._context.on("page", lambda page: page.add_init_script(script=ANTI_DETECTION_JS))
+                
+                ANTI_DETECTION_JS = """
+                (() => {
+                    // Pass the webdriver check
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => false,
+                    });
+
+                    // Pass the plugins check
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5],
+                    });
+
+                    // Pass the languages check
+                    Object.defineProperty(navigator, 'languages', {
+                        get: () => ['en-US', 'en'],
+                    });
+
+                    // Overwrite the chrome runtime object
+                    window.chrome = {
+                        runtime: {},
+                        // add more chrome properties if needed
+                    };
+
+                    // Mock permissions query to avoid detection
+                    const originalQuery = window.navigator.permissions.query;
+                    window.navigator.permissions.query = (parameters) => (
+                        parameters.name === 'notifications' ?
+                            Promise.resolve({ state: Notification.permission }) :
+                            originalQuery(parameters)
+                    );
+
+                    // Pass the iframe check
+                    Object.defineProperty(window, 'frameElement', {
+                        get: () => null,
+                    });
+
+                    // Mock WebGL vendor and renderer
+                    const getParameter = WebGLRenderingContext.prototype.getParameter;
+                    WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                        if (parameter === 37445) {
+                            return 'Intel Inc.'; // UNMASKED_VENDOR_WEBGL
+                        }
+                        if (parameter === 37446) {
+                            return 'Intel Iris OpenGL Engine'; // UNMASKED_RENDERER_WEBGL
+                        }
+                        return getParameter(parameter);
+                    };
+                })();
+                """
+                
                 self._page = await self._context.new_page()
+                asyncio.create_task(self.start_routing())
+
 
                 self.logger.info("Navigating to Webshare registration page...")
                 await self._page.goto(self.WEBSSHARE_REGISTER_URL, wait_until="domcontentloaded", timeout=60000)
-                await asyncio.sleep(100000)
                 await self._page.mouse.move(self._mouse_x, self._mouse_y)
                 self.logger.info("Filling out registration form...")
                 await self._human_like_type(self._page.locator('input[data-testid="password-input"]'), password)
@@ -284,16 +423,24 @@ class WebshareRegisterer:
                     )
                     self._mouse_x, self._mouse_y = await solver.solve()
                     self.logger.info("Captcha solving process completed.")
-
-                await self._page.locator("text=Creating Your Proxy List...").wait_for(timeout=15000)
-                self.logger.info("✅ Registration and CAPTCHA successfully completed.")
-
-                await self._page.goto(self.WEBSHARE_PROXY_PAGE)
-                self._page.on("response", self._handle_response_listener)
-
-                self.logger.info("Attached response listener. Waiting for proxy list to be fetched.")
-                await self._event_close.wait()
+                
+                self.logger.info("✅ Registration and CAPTCHA successfully completed. Now waiting for register data.")
+                register_payload_data = await self._event_request_catched
+                self.logger.info(f"✅ Got future resutlt. Continuing.")
+                await self.manual_register(register_payload_data)
                 return True
+                # await self._page.locator("text=Creating Your Proxy List...").wait_for(timeout=15000)
+            
+            
+
+
+
+
+                # await self._page.goto(self.WEBSHARE_PROXY_PAGE)
+
+                # self.logger.info("Attached response listener. Waiting for proxy list to be fetched.")
+                # await self._event_close.wait()
+                # return True
 
         except Exception as e:
             self.logger.error(f"Registration failed: {e}", exc_info=True)
@@ -320,10 +467,12 @@ class WebshareRegisterer:
 async def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     proxy_config =  {
-        "server": "http://104.239.105.125:6655",
-        "username": "jrkwdmsz",
-        "password": "zv9slg5hiiwo"
+        "server": "http://206.41.172.74:6634",
+        "username": "xgjithpf",
+        "password": "i3v006gylnxm"
     }
+
+    # proxy_config = None
     tasks = []
     for _ in range(1): # Number of concurrent registrations
         registerer = WebshareRegisterer(verbose=True, proxy_details=proxy_config)
