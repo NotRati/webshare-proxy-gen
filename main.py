@@ -12,6 +12,7 @@ from typing import Dict, Any, Optional
 import re
 import psutil
 
+import proxy_checker
 from playwright_stealth import Stealth
 from bs4 import BeautifulSoup
 import httpx
@@ -52,11 +53,11 @@ class WebshareRegisterer:
         headless: bool = False,
         proxy_details: Optional[Dict[str, str]] = None,
         whisper_model: str = "base",
-        verbose: bool = False
+        verbose: bool = False,
+        proxy_file: str = "proxies.json",
     ):
-        self.proxy_file_path = "proxies.json"
+        self.proxy_file_path = proxy_file
         self.headless = headless
-        self.proxy_details = proxy_details
         self.whisper_model = whisper_model
         self.verbose = verbose
         self.SET_SECOND = False
@@ -221,8 +222,10 @@ class WebshareRegisterer:
     
     async def manual_register(self, post_data: str):
         max_retries = 3
-        proxy_url = f"http://{self.proxy_details['username']}:{self.proxy_details['password']}@{self.proxy_details['server'].split('://')[1]}"
-
+        valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, None, max_proxies=30)
+        proxy_info = random.choice(valid_proxies)
+        proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+        print(proxy_url)
         for attempt in range(1, max_retries + 1):
             try:
                 async with httpx.AsyncClient(timeout=20, proxy=proxy_url) as client:
@@ -290,7 +293,7 @@ class WebshareRegisterer:
                     self.logger.info(f"Retrying in {backoff} seconds...")
                     await asyncio.sleep(backoff)
 
-    async def _handle_request_listener(self,route, request):
+    async def _handle_request_listener(self,route, request): 
         try:
             if request.url == self.WEBSHARE_REGISTER_API_URL and request.method == "POST":
                 # print(f"URL: {request.url}")
