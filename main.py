@@ -387,7 +387,7 @@ class WebshareRegisterer:
                     self.logger.info("Self headless is true")
                 else:
                     args = []
-                self._browser = await p.chromium.launch(args=args, headless=True)
+                self._browser = await p.chromium.launch(args=args, headless=False)
     
                 self._context = await self._browser.new_context(
                     user_agent=random.choice(USER_AGENTS),
