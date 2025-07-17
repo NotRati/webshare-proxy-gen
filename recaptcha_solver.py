@@ -30,7 +30,7 @@ class RecaptchaAudioSolver:
         mouse_x: float,
         mouse_y: float,
         whisper_model: str = "base",
-        verbose: bool = False
+        verbose: bool = False,
     ):
         """
         Initializes the solver.
@@ -47,15 +47,16 @@ class RecaptchaAudioSolver:
         self.outer_instance = outer_instance
         self.page = page
         self.verbose = verbose
-        self.logger = logging.getLogger(f"{self.__class__.__name__}_{id(self)}")
-        self.logger.propagate = False
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            self.logger.addHandler(handler)
+        self.logger = outer_instance.logger
 
-        self.logger.setLevel(logging.INFO if verbose else logging.WARNING)
+        # self.logger.propagate = False
+        # if not self.logger.handlers:
+        #     handler = logging.StreamHandler()
+        #     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        #     handler.setFormatter(formatter)
+        #     self.logger.addHandler(handler)
+
+        # self.logger.setLevel(logging.INFO if verbose else logging.WARNING)
 
         self.model = whisper.load_model(whisper_model)
         self.mouse_x = mouse_x

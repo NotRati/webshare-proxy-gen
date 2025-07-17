@@ -1,0 +1,21 @@
+2025-07-17 23:16:32,408 - [INFO] - GUI mode: Process started for instance 17540_1
+2025-07-17 23:16:32,408 - [INFO] - Attempting to generate a new email alias via SimpleLogin...
+2025-07-17 23:16:35,410 - [INFO] - ✅ Generated random proxy: 'http://xysiicvn:0y6a1lxj3bd4@198.23.239.134:6540'
+2025-07-17 23:16:39,196 - [ERROR] - Fatal error during email generation: Could not find new alias container on dashboard.
+Traceback (most recent call last):
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 213, in _generate_email
+    if not div: raise RuntimeError("Could not find new alias container on dashboard.")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Could not find new alias container on dashboard.
+2025-07-17 23:16:39,196 - [ERROR] - Registration failed: Could not find new alias container on dashboard.
+Traceback (most recent call last):
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 391, in register
+    alias_info = await self._generate_email()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 213, in _generate_email
+    if not div: raise RuntimeError("Could not find new alias container on dashboard.")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Could not find new alias container on dashboard.
+2025-07-17 23:16:39,196 - [INFO] - Total process finished in 6.79 seconds.
+2025-07-17 23:16:39,196 - [INFO] - Task completed.
+2025-07-17 23:16:39,196 - [INFO] - ---DONE LOGGER---

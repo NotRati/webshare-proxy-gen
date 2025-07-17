@@ -1,0 +1,23 @@
+2025-07-17 23:33:06,156 - [INFO] - Attempting to generate a new email alias via SimpleLogin...
+2025-07-17 23:33:08,028 - [INFO] - ✅ Generated random proxy: 'http://ihbwnvxe:uasqp5l1p4p2@142.147.128.93:6593'
+2025-07-17 23:33:12,556 - [INFO] - Generated Email: enclosure_stunner943@simplelogin.com (Alias ID: 29989329)
+2025-07-17 23:33:12,556 - [INFO] - Starting Webshare registration for Email: enclosure_stunner943@simplelogin.com
+2025-07-17 23:33:13,065 - [ERROR] - Registration failed: 'list' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "c:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 404, in register
+    self._browser = await p.chromium.launch(args=[
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\.venv\Lib\site-packages\playwright_stealth\stealth.py", line 271, in async_hooked_method
+    **self._kwargs_with_patched_cli_arg(method, kwargs, chromium_mode),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\.venv\Lib\site-packages\playwright_stealth\stealth.py", line 260, in _kwargs_with_patched_cli_arg
+    new_cli_args = self._patch_blink_features_cli_args(new_cli_args or [])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\.venv\Lib\site-packages\playwright_stealth\stealth.py", line 482, in _patch_blink_features_cli_args
+    stripped_arg = arg.strip()
+                   ^^^^^^^^^
+AttributeError: 'list' object has no attribute 'strip'
+2025-07-17 23:33:13,067 - [INFO] - Cleaning up alias: enclosure_stunner943@simplelogin.com
+2025-07-17 23:33:13,067 - [INFO] - ✅ Got already generated random proxy: 'http://ktzrtktj:dfzuu2kwg21s@207.244.217.165:6712'
+2025-07-17 23:33:14,378 - [INFO] - Deletion request sent for alias: enclosure_stunner943@simplelogin.com
+2025-07-17 23:33:14,378 - [INFO] - Total process finished in 8.22 seconds.

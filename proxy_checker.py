@@ -11,9 +11,7 @@ async def check_proxies_from_file(
     max_proxies: int | None = None  # New parameter to limit proxies checked
 ) -> list:
     async def check_proxy(session: aiohttp.ClientSession, proxy_info: dict) -> dict | None:
-        if proxy_info.get("reason"):
-            return None
-
+        
         proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
 
         try:
@@ -29,10 +27,12 @@ async def check_proxies_from_file(
 
     async with aiofiles.open(input_file, 'r') as f:
         content = await f.read()
+        if content == "":
+            return []
         proxies_data = json.loads(content)
 
     # Flatten proxies list
-    all_proxies = [proxy for group in proxies_data for proxy in group.get("results", [])]
+    all_proxies = proxies_data
 
     if max_proxies is not None:
         all_proxies = all_proxies[:max_proxies]
@@ -59,4 +59,4 @@ async def check_proxies_from_file(
 
 # Example usage
 if __name__ == "__main__":
-    print(asyncio.run(check_proxies_from_file("proxies.json", None, timeout_seconds=5, max_proxies=50)))
+    print(asyncio.run(check_proxies_from_file("proxies.json", "1proxies.json", timeout_seconds=5, max_proxies=None)))

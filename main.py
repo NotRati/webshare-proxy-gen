@@ -11,6 +11,7 @@ from time import time
 from typing import Dict, Any, Optional
 import re
 import psutil
+import argparse
 
 import proxy_checker
 from playwright_stealth import Stealth
@@ -51,11 +52,12 @@ class WebshareRegisterer:
     def __init__(
         self,
         headless: bool = False,
-        proxy_details: Optional[Dict[str, str]] = None,
         whisper_model: str = "base",
         verbose: bool = False,
         proxy_file: str = "proxies.json",
+        instance_id=None
     ):
+        self.valid_proxies = None
         self.proxy_file_path = proxy_file
         self.headless = headless
         self.whisper_model = whisper_model
@@ -63,24 +65,51 @@ class WebshareRegisterer:
         self.SET_SECOND = False
         self._event_close = asyncio.Event()
         self._event_request_catched = asyncio.Future()
-        self.logger = logging.getLogger(f"{self.__class__.__name__}_{id(self)}")
-        self.logger.propagate = False
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            handler.setFormatter(formatter)
-            self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO if verbose else logging.WARNING)
+        log_identifier = instance_id if instance_id is not None else id(self)
+        self.logger = self.setup_logger(log_identifier)
         self.WEBSHARE_PROXY_PAGE = "https://dashboard.webshare.io/proxy/list?authenticationMethod=%22username_password%22&connectionMethod=%22direct%22&proxyControl=%220%22&rowsPerPage=10&page=0&order=%22asc%22&orderBy=null&searchValue=%22%22&removeType=%22refresh_all%22"
         self._browser: Optional[BrowserContext] = None
         self._context: Optional[BrowserContext] = None
         self._page: Optional[Page] = None
         self._mouse_x = random.uniform(100, 300)
         self._mouse_y = random.uniform(100, 300)
+        asyncio.create_task(self.log_and_flush_loop())
+    def setup_logger(self, identifier):
+        class_name = self.__class__.__name__
+        log_dir = "logs"
+        os.makedirs(log_dir, exist_ok=True)
 
+        logger_name = f"{class_name}_{identifier}"
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(logging.INFO)
+
+        if not logger.handlers:
+            # 2. This is the crucial change: Use the identifier for the file path.
+            # Now the file name is predictable (e.g., WebshareRegisterer_8888_0.log)
+            log_path = os.path.join(log_dir, f"{class_name}_{identifier}.log")
+            
+            # Ensure the file is cleared for each new run
+            file_handler = logging.FileHandler(log_path, mode='w', encoding='utf-8')
+            formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(message)s')
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
+
+            # Optional: Keep console logging for direct debugging
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(formatter)
+            logger.addHandler(console_handler)
+
+            logger.propagate = False
+
+        return logger
     async def _random_delay(self, mu: float = 0.5, sigma: float = 0.2):
         await asyncio.sleep(max(0.1, np.random.normal(mu, sigma)))
-
+    async def log_and_flush_loop(self):
+        while True:
+            for handler in self.logger.handlers:
+                if isinstance(handler, logging.FileHandler):
+                    handler.flush()
+            await asyncio.sleep(1)
     async def _human_like_mouse_move(self, page: Page, locator: Locator, start_x: float, start_y: float) -> tuple[float, float]:
         try:
             # 1. Simulate human reaction delay
@@ -157,14 +186,19 @@ class WebshareRegisterer:
     async def _generate_email(self, *args) -> Dict[str, Any]:
         async with self._email_generation_lock:
             self.logger.info("Attempting to generate a new email alias via SimpleLogin...")
+            self.valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
+            proxy_info = random.choice(self.valid_proxies)
+            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
+
             try:
-                async with httpx.AsyncClient() as client:
+                async with httpx.AsyncClient(proxy=proxy_url) as client:
                     response = await client.get('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)})
                     response.raise_for_status()
                     soup = BeautifulSoup(response.text, 'html.parser')
                     csrf_token = soup.find("input", attrs={"name": "csrf_token"}).get("value")
                     
-                    data = {'csrf_token': csrf_token, 'email': 'ratiardoteli11@gmail.com', 'password': 'rati1234'}
+                    data = {'csrf_token': csrf_token, 'email': 'ardoteliratilol@gmail.com', 'password': 'rati1234'}
                     await client.post('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)}, data=data, follow_redirects=True)
                     
                     response = await client.get('https://app.simplelogin.io/dashboard/', follow_redirects=True)
@@ -190,7 +224,17 @@ class WebshareRegisterer:
                 raise
 
     async def cleanup_alias(self, alias_info: Dict[str, Any]):
-        async with httpx.AsyncClient(cookies=alias_info['cookies']) as client:
+        if self.valid_proxies is None:
+            valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
+            proxy_info = random.choice(valid_proxies)
+            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
+        else:
+            proxy_info = random.choice(self.valid_proxies)
+            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+            self.logger.info(f"✅ Got already generated random proxy: '{proxy_url}'")
+
+        async with httpx.AsyncClient(cookies=alias_info['cookies'], proxy=proxy_url) as client:
             delete_data = {
                 'csrf_token': alias_info['csrf_token'],
                 'form-name': 'delete-alias',
@@ -222,10 +266,15 @@ class WebshareRegisterer:
     
     async def manual_register(self, post_data: str):
         max_retries = 3
-        valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, None, max_proxies=30)
-        proxy_info = random.choice(valid_proxies)
-        proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-        print(proxy_url)
+        if self.valid_proxies is None:
+            valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
+            proxy_info = random.choice(valid_proxies)
+            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
+        else:
+            proxy_info = random.choice(self.valid_proxies)
+            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+            self.logger.info(f"✅ Got already generated random proxy: '{proxy_url}'")
         for attempt in range(1, max_retries + 1):
             try:
                 async with httpx.AsyncClient(timeout=20, proxy=proxy_url) as client:
@@ -263,6 +312,10 @@ class WebshareRegisterer:
                     self.logger.info(f"Proxy list fetch status: {response.status_code}")
                     self.logger.info(f"Proxy list response text: {response.text}")
                     json_body = response.json()
+                    extracted = []
+                    for proxy in json_body['results']:
+                        extracted.append(proxy)
+
                     data = []
                     if os.path.exists(self.proxy_file_path):
                         with open(self.proxy_file_path, "r") as f:
@@ -270,17 +323,18 @@ class WebshareRegisterer:
                                 existing_data = json.load(f)
                                 if isinstance(existing_data, list):
                                     data.extend(existing_data)
-                            except json.JSONDecodeError: pass
-                    data.append(json_body)
+                            except json.JSONDecodeError:
+                                pass
+
+                    # ❌ Wrong: data.append(extracted) → creates a nested list
+                    # ✅ Correct: flatten by using extend
+                    data.extend(extracted)
+
                     with open(self.proxy_file_path, "w") as f:
                         json.dump(data, f, indent=2)
-                    self.logger.info(f"Saved {len(json_body.get('data', []))} proxies to {self.proxy_file_path}")
 
-                    if self.SET_SECOND:
-                        self.logger.info("Second proxy list fetched. Closing.")
-                        self._event_close.set()
-                    else:
-                        self.SET_SECOND = True
+                    self.logger.info(f"Saved {len(extracted)} proxies to {self.proxy_file_path}")
+
                     return True
             
             except (httpx.HTTPStatusError, httpx.RequestError, httpx.ReadTimeout) as e:
@@ -302,19 +356,19 @@ class WebshareRegisterer:
                 try:
                     post_data = request.post_data
                     if post_data:
-                        print("Post Data:", post_data)
+                        self.logger.info("Post Data:" + str(post_data))
                     else:
-                        print("No Post Data")
+                        self.logger.warning("No Post Data")
                     
                     await route.abort()
                     self._event_request_catched.set_result(post_data)
 
                 except Exception as e:
-                    print("Error accessing post data:", e)
+                    self.logger.error("Error accessing post data:"+ str(e))
             else:
                 await route.continue_()
         except Exception as e:
-            print("Error processing request:", e)
+            self.logger.info("Error processing request:" +  str(e))
 
     @staticmethod
     def hide_windows_by_pid(target_pids, logger):
@@ -340,7 +394,15 @@ class WebshareRegisterer:
 
             self.logger.info(f"Starting Webshare registration for Email: {email}")
             async with Stealth().use_async(async_playwright()) as p:
-                self._browser = await p.chromium.launch(headless=self.headless)
+                if self.headless:
+                    args = [
+                        '--window-position=-10000,-10000',
+                        '--window-size=1,1'
+                    ]
+                    self.logger.info("Self headless is true")
+                else:
+                    args = []
+                self._browser = await p.chromium.launch(args=args, headless=False)
     
                 self._context = await self._browser.new_context(
                     user_agent=random.choice(USER_AGENTS),
@@ -350,7 +412,7 @@ class WebshareRegisterer:
                 )
                 
                 # Add anti-detection scripts on new pages
-                self._context.on("page", lambda page: page.add_init_script(script=ANTI_DETECTION_JS))
+                # self._context.on("page", lambda page: page.add_init_script(script=ANTI_DETECTION_JS))
                 
                 ANTI_DETECTION_JS = """
                 (() => {
@@ -432,18 +494,6 @@ class WebshareRegisterer:
                 self.logger.info(f"✅ Got future resutlt. Continuing.")
                 await self.manual_register(register_payload_data)
                 return True
-                # await self._page.locator("text=Creating Your Proxy List...").wait_for(timeout=15000)
-            
-            
-
-
-
-
-                # await self._page.goto(self.WEBSHARE_PROXY_PAGE)
-
-                # self.logger.info("Attached response listener. Waiting for proxy list to be fetched.")
-                # await self._event_close.wait()
-                # return True
 
         except Exception as e:
             self.logger.error(f"Registration failed: {e}", exc_info=True)
@@ -467,25 +517,85 @@ class WebshareRegisterer:
             time_taken = round(time() - start_time, 2)
             self.logger.info(f"Total process finished in {time_taken} seconds.")
 
-async def main():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    proxy_config =  {
-        "server": "http://206.41.172.74:6634",
-        "username": "xgjithpf",
-        "password": "i3v006gylnxm"
-    }
+async def main(concurrent: int, headless: bool, total: int):    
+    completed = 0
+    while total == -1 or completed < total:
+        batch_size = min(concurrent, total - completed) if total != -1 else concurrent
+        tasks = []
+        for _ in range(batch_size):
+            registerer = WebshareRegisterer(verbose=True, headless=headless)
+            task = asyncio.create_task(registerer.register())
+            tasks.append(task)
 
-    # proxy_config = None
-    tasks = []
-    for _ in range(1): # Number of concurrent registrations
-        registerer = WebshareRegisterer(verbose=True, proxy_details=proxy_config)
-        tasks.append(registerer.register())
-        await asyncio.sleep(5) # Stagger the starts
+        await asyncio.gather(*tasks)
+        completed += len(tasks)
 
-    await asyncio.gather(*tasks)
+async def run_gui_instance(headless: bool, instance_id: str):
+    """
+    Runs a single registration task. This is called when the script
+    is launched from the GUI with an instance_id.
+    """
+    # Pass the instance_id to the class constructor
+    registerer = WebshareRegisterer(verbose=True, headless=headless, instance_id=instance_id)
+    try:
+        registerer.logger.info(f"GUI mode: Process started for instance {instance_id}")
+        await registerer.register()
+        registerer.logger.info("Task completed.")
+    except Exception as e:
+        # Log any errors to the specific log file for the GUI to see
+        registerer.logger.error(f"An unhandled error occurred: {e}", exc_info=True)
+    finally:
+        # This special message is the signal for the GUI to clear the text box
+        registerer.logger.info("---DONE LOGGER---")
+
+
+async def run_standalone(concurrent: int, headless: bool, total: int):
+    """
+    This is your original logic for running multiple tasks concurrently
+    when the script is started directly, not from the GUI.
+    """
+    print(f"Standalone mode: Running {concurrent} concurrent tasks.")
+    completed = 0
+    while total == -1 or completed < total:
+        batch_size = min(concurrent, total - completed) if total != -1 else concurrent
+        tasks = []
+        for _ in range(batch_size):
+            # In this mode, we don't pass an instance_id, so it will use the old
+            # id(self) method for logging, which is fine for standalone use.
+            registerer = WebshareRegisterer(verbose=True, headless=headless)
+            task = asyncio.create_task(registerer.register())
+            tasks.append(task)
+
+        await asyncio.gather(*tasks)
+        completed += len(tasks)
+        print(f"Batch completed. Total registrations: {completed}")
+
 
 if __name__ == "__main__":
-    # Ensure you have the necessary model file for Whisper.
-    # It will be downloaded automatically on the first run.
-    # Example: whisper.load_model("base")
-    asyncio.run(main())
+    parser = argparse.ArgumentParser()
+    # Your original arguments
+    parser.add_argument("--concurrent", type=int, default=1, help="Number of concurrent registrations (standalone mode)")
+    parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+    parser.add_argument("--total", type=int, default=-1, help="Total number of registrations (-1 for infinite, standalone mode)")
+    
+    # Add the new argument from the launcher GUI. Default is None.
+    parser.add_argument("--instance-id", type=str, default=None, help="[For GUI Use] Unique ID provided by the launcher.")
+
+    args = parser.parse_args()
+
+    # --- Logic to select run mode ---
+    if args.instance_id:
+        # If instance_id is present, we are in GUI mode. Run a single task.
+        asyncio.run(run_gui_instance(args.headless, args.instance_id))
+    else:
+        # If no instance_id, run in standalone mode with original logic.
+        asyncio.run(run_standalone(args.concurrent, args.headless, args.total))
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("--concurrent", type=int, default=1, help="Number of concurrent registrations")
+#     parser.add_argument("--headless", action="store_true", help="Run in headless mode")
+#     parser.add_argument("--total", type=int, default=-1, help="Total number of registrations (-1 for infinite)")
+
+#     args = parser.parse_args()
+
+#     asyncio.run(main(args.concurrent, args.headless, args.total))
