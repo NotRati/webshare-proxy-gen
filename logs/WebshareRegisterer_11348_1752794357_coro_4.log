@@ -1,0 +1,21 @@
+2025-07-18 03:19:21,252 [INFO] Coroutine 4 started with instance ID: 11348_1752794357_coro_4
+2025-07-18 03:19:53,239 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-18 03:19:57,773 [INFO] ✅ Generated random proxy: 'http://snuodaks:s694yqgzleb2@207.244.217.165:6712'
+2025-07-18 03:19:59,523 [ERROR] Fatal error during email generation: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "C:\Users\Magda\Documents\Scripts\webshare-proxy-gen\main.py", line 206, in _generate_email
+    csrf_token_dashboard = soup.find("input", attrs={"name": "csrf_token"}).get("value")
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+2025-07-18 03:19:59,524 [ERROR] Registration failed: 'NoneType' object has no attribute 'get'
+Traceback (most recent call last):
+  File "C:\Users\Magda\Documents\Scripts\webshare-proxy-gen\main.py", line 376, in register
+    alias_info = await self._generate_email()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Magda\Documents\Scripts\webshare-proxy-gen\main.py", line 206, in _generate_email
+    csrf_token_dashboard = soup.find("input", attrs={"name": "csrf_token"}).get("value")
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+2025-07-18 03:19:59,527 [INFO] Total process finished in 38.27 seconds.
+2025-07-18 03:19:59,527 [INFO] Coroutine 4 completed.
+2025-07-18 03:19:59,527 [INFO] ---DONE LOGGER---

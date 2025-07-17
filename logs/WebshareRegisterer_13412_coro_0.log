@@ -1,0 +1,27 @@
+2025-07-18 03:08:24,735 [INFO] Coroutine 0 started with instance ID: 13412_coro_0
+2025-07-18 03:08:24,735 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-18 03:08:27,627 [INFO] ✅ Generated random proxy: 'http://uewdtvxv:2v6p751jrj3b@45.38.107.97:6014'
+2025-07-18 03:08:27,828 [INFO] ✅ Generated random proxy: 'http://rhbschfe:fectq6lbt30l@142.147.128.93:6593'
+2025-07-18 03:08:28,795 [INFO] ✅ Generated random proxy: 'http://kofvpfnt:wtlx6p6hgdvc@45.38.107.97:6014'
+2025-07-18 03:08:31,168 [INFO] Generated Email: machine_cosmic743@simplelogin.com (Alias ID: 29996141)
+2025-07-18 03:08:31,175 [INFO] Starting Webshare registration for Email: machine_cosmic743@simplelogin.com
+2025-07-18 03:08:31,961 [INFO] Generated Email: machine_cosmic743@simplelogin.com (Alias ID: 29996141)
+2025-07-18 03:08:31,961 [INFO] Starting Webshare registration for Email: machine_cosmic743@simplelogin.com
+2025-07-18 03:08:32,022 [INFO] Self headless is true
+2025-07-18 03:08:32,871 [INFO] Generated Email: machine_cosmic743@simplelogin.com (Alias ID: 29996141)
+2025-07-18 03:08:32,873 [INFO] Starting Webshare registration for Email: machine_cosmic743@simplelogin.com
+2025-07-18 03:08:33,423 [INFO] Self headless is true
+2025-07-18 03:08:34,002 [INFO] Navigating to Webshare registration page...
+2025-07-18 03:08:35,414 [INFO] Navigating to Webshare registration page...
+2025-07-18 03:08:35,606 [INFO] Self headless is true
+2025-07-18 03:08:38,284 [INFO] Navigating to Webshare registration page...
+2025-07-18 03:08:38,368 [INFO] Filling out registration form...
+2025-07-18 03:08:39,233 [INFO] Filling out registration form...
+2025-07-18 03:08:39,975 [INFO] Cleaning up alias: machine_cosmic743@simplelogin.com
+2025-07-18 03:08:39,975 [INFO] ✅ Got already generated random proxy: 'http://rhbschfe:fectq6lbt30l@206.41.172.74:6634'
+2025-07-18 03:08:39,977 [INFO] ✅ Got already generated random proxy: 'http://rhbschfe:fectq6lbt30l@45.38.107.97:6014'
+2025-07-18 03:08:40,810 [INFO] Cleaning up alias: machine_cosmic743@simplelogin.com
+2025-07-18 03:08:40,810 [INFO] ✅ Got already generated random proxy: 'http://ktzrtktj:dfzuu2kwg21s@207.244.217.165:6712'
+2025-07-18 03:08:40,881 [INFO] ---DONE LOGGER---
+2025-07-18 03:08:40,885 [INFO] ---DONE LOGGER---
+2025-07-18 03:08:42,121 [INFO] Deletion request sent for alias: machine_cosmic743@simplelogin.com

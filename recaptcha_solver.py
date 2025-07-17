@@ -9,6 +9,7 @@ from typing import Any
 import httpx
 import whisper
 from playwright.async_api import Page, FrameLocator, Locator
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
 class RecaptchaAudioSolver:
     """
@@ -69,12 +70,41 @@ class RecaptchaAudioSolver:
         """
         try:
             challenge_frame = self.page.frame_locator(self._IFRAME_CHALLENGE_SELECTOR)
-            await self._solve_audio_challenge(challenge_frame)
+            return await self._solve_audio_challenge(challenge_frame)
         except Exception as e:
             self.logger.error(f"Failed to solve audio challenge: {e}", exc_info=self.verbose)
-            raise RuntimeError("Failed to solve CAPTCHA.") from e
+            self.logger.critical("Failed to solve CAPTCHA.")
+            return False
 
-        return self.mouse_x, self.mouse_y
+    async def _check_if_caught(self, frame: FrameLocator) -> bool:
+        """
+        Checks if a "Try again later" message is visible within the given frame,
+        indicating a CAPTCHA failure.
+
+        This method uses a case-insensitive regular expression to reliably find the
+        message, even if its capitalization or surrounding HTML changes.
+
+        Args:
+            frame: The Playwright FrameLocator for the reCAPTCHA iframe.
+
+        Returns:
+            True if the message is visible, False otherwise.
+        """
+        try:
+            # Use ':text-matches' with a regular expression for a robust, case-insensitive check.
+            # The "i" flag at the end of the regex makes it case-insensitive.
+            error_message_locator = frame.locator(':text-matches("Try again later", "i")')
+
+            # is_visible() is the perfect tool here. It waits for the element to appear
+            # and returns True, or returns False if the timeout is reached.
+            # A slightly longer timeout can help with network or animation delays.
+            is_visible = await error_message_locator.is_visible()
+            
+            return is_visible
+        except PlaywrightTimeoutError:
+            # This would only happen in rare cases with is_visible(), but it's good practice.
+            # It means the frame itself might have had an issue.
+            return False
 
     async def _solve_audio_challenge(self, frame: FrameLocator, max_retries: int = 3):
         try:
@@ -85,11 +115,15 @@ class RecaptchaAudioSolver:
             await audio_btn_locator.click()
             await self.outer_instance._random_delay(1, 0.3)
         except Exception as e:
-            raise RuntimeError(f"Could not find or click button to switch to audio challenge: {e}") from e
+            self.logger.critical(f"Could not find or click button to switch to audio challenge: {e}") 
+            return False
 
         for attempt in range(max_retries):
             try:
                 self.logger.info(f"Audio challenge attempt {attempt + 1}/{max_retries}")
+                if await self._check_if_caught(frame):
+                    self.logger.info(f"❌ Couldn't evade bot detection returning without solving")
+                    return False
                 audio_bytes = await self._download_audio(frame)
                 transcribed_text = self._transcribe_audio(audio_bytes)
                 self.logger.info(f"Transcription result: '{transcribed_text}'")
@@ -113,14 +147,15 @@ class RecaptchaAudioSolver:
 
                 if await self._is_solved():
                     self.logger.info("Captcha solved successfully.")
-                    return
+                    return True
                 else:
                     self.logger.warning("Verification failed, trying new audio.")
 
             except Exception as e:
                 self.logger.error(f"Error in audio attempt loop: {e}", exc_info=self.verbose)
                 if attempt == max_retries - 1:
-                    raise RuntimeError("Exceeded max retries for audio challenge.")
+                    self.logger.critical("Exceeded max retries for audio challenge.")
+                    return False
 
     async def _download_audio(self, frame: FrameLocator) -> bytes:
         download_link = frame.locator(self._AUDIO_DOWNLOAD_LINK_SELECTOR)

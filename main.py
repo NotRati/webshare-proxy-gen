@@ -6,7 +6,7 @@ import random
 import os
 import math
 import json
-import win32gui, win32con, win32process
+# import win32gui, win32con, win32process
 from time import time
 from typing import Dict, Any, Optional
 import re
@@ -369,21 +369,6 @@ class WebshareRegisterer:
                 await route.continue_()
         except Exception as e:
             self.logger.info("Error processing request:" +  str(e))
-
-    @staticmethod
-    def hide_windows_by_pid(target_pids, logger):
-        def enum_handler(hwnd, _):
-            try:
-                _, pid = win32process.GetWindowThreadProcessId(hwnd)
-                if pid in target_pids:
-                    win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
-            except Exception: pass
-        win32gui.EnumWindows(enum_handler, None)
-
-    @staticmethod
-    def get_chromium_pids():
-        return {p.pid for p in psutil.process_iter(['name']) if p.info['name'] and 'chrome' in p.info['name'].lower()}
-
     async def register(self) -> bool:
         start_time = time()
         alias_info = None
@@ -402,7 +387,7 @@ class WebshareRegisterer:
                     self.logger.info("Self headless is true")
                 else:
                     args = []
-                self._browser = await p.chromium.launch(args=args, headless=False)
+                self._browser = await p.chromium.launch(args=args, headless=True)
     
                 self._context = await self._browser.new_context(
                     user_agent=random.choice(USER_AGENTS),
@@ -486,9 +471,11 @@ class WebshareRegisterer:
                         self, self._page, self._mouse_x, self._mouse_y,
                         whisper_model=self.whisper_model, verbose=self.verbose
                     )
-                    self._mouse_x, self._mouse_y = await solver.solve()
-                    self.logger.info("Captcha solving process completed.")
-                
+                    solved = await solver.solve()
+                    if solved:
+                        self.logger.info("Captcha solving process completed.")
+                    else:
+                        raise RuntimeError("❌ Couldn't solve Captcha.")
                 self.logger.info("✅ Registration and CAPTCHA successfully completed. Now waiting for register data.")
                 register_payload_data = await self._event_request_catched
                 self.logger.info(f"✅ Got future resutlt. Continuing.")
@@ -497,12 +484,6 @@ class WebshareRegisterer:
 
         except Exception as e:
             self.logger.error(f"Registration failed: {e}", exc_info=True)
-            if self._page and not self.headless:
-                try:
-                    await self._page.screenshot(path="webshare_registration_failure.png")
-                    self.logger.info("Screenshot taken: webshare_registration_failure.png")
-                except Exception as ss_e:
-                    self.logger.error(f"Failed to take screenshot: {ss_e}")
             return False
         finally:
             if alias_info:
@@ -530,23 +511,57 @@ async def main(concurrent: int, headless: bool, total: int):
         await asyncio.gather(*tasks)
         completed += len(tasks)
 
-async def run_gui_instance(headless: bool, instance_id: str):
+async def run_gui_instance(headless: bool, instance_id: str, concurrent: int = 1, total: int = -1):
     """
-    Runs a single registration task. This is called when the script
-    is launched from the GUI with an instance_id.
+    Runs concurrent registration tasks for the GUI instance,
+    creating separate log files per coroutine with naming:
+    logs/WebshareRegisterer_{instance_id}_coro_{i}.log
     """
-    # Pass the instance_id to the class constructor
-    registerer = WebshareRegisterer(verbose=True, headless=headless, instance_id=instance_id)
-    try:
-        registerer.logger.info(f"GUI mode: Process started for instance {instance_id}")
-        await registerer.register()
-        registerer.logger.info("Task completed.")
-    except Exception as e:
-        # Log any errors to the specific log file for the GUI to see
-        registerer.logger.error(f"An unhandled error occurred: {e}", exc_info=True)
-    finally:
-        # This special message is the signal for the GUI to clear the text box
-        registerer.logger.info("---DONE LOGGER---")
+
+    async def coro_task(idx: int):
+        # Compose a unique instance id per coroutine for logging and identification
+        coro_instance_id = f"{instance_id}_coro_{idx}"
+
+        # Prepare logger
+        logger = logging.getLogger(coro_instance_id)
+        logger.setLevel(logging.DEBUG)
+
+        # Clear existing handlers
+        if logger.hasHandlers():
+            logger.handlers.clear()
+
+        os.makedirs("logs", exist_ok=True)
+        log_path = os.path.join("logs", f"WebshareRegisterer_{coro_instance_id}.log")
+
+        formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+        # Instantiate your existing class with the coro_instance_id and headless mode
+        registerer = WebshareRegisterer(verbose=True, headless=headless, instance_id=coro_instance_id)
+        registerer.logger = logger  # Inject our file logger
+
+        try:
+            logger.info(f"Coroutine {idx} started with instance ID: {coro_instance_id}")
+            await registerer.register()
+            logger.info(f"Coroutine {idx} completed.")
+        except Exception as e:
+            logger.error(f"An error occurred in coroutine {idx}: {e}", exc_info=True)
+        finally:
+            logger.info("---DONE LOGGER---")
+
+    if total == -1:
+        # Run forever, spawning the concurrent coros in each batch
+        while True:
+            await asyncio.gather(*(coro_task(i) for i in range(concurrent)))
+    else:
+        count = 0
+        while count < total:
+            # Run coroutines concurrently in batches of 'concurrent'
+            await asyncio.gather(*(coro_task(i) for i in range(concurrent)))
+            count += concurrent
+
 
 
 async def run_standalone(concurrent: int, headless: bool, total: int):
@@ -576,7 +591,7 @@ if __name__ == "__main__":
     # Your original arguments
     parser.add_argument("--concurrent", type=int, default=1, help="Number of concurrent registrations (standalone mode)")
     parser.add_argument("--headless", action="store_true", help="Run in headless mode")
-    parser.add_argument("--total", type=int, default=-1, help="Total number of registrations (-1 for infinite, standalone mode)")
+    parser.add_argument("--total", type=int, default=1, help="Total number of registrations (-1 for infinite, standalone mode)")
     
     # Add the new argument from the launcher GUI. Default is None.
     parser.add_argument("--instance-id", type=str, default=None, help="[For GUI Use] Unique ID provided by the launcher.")
@@ -585,10 +600,8 @@ if __name__ == "__main__":
 
     # --- Logic to select run mode ---
     if args.instance_id:
-        # If instance_id is present, we are in GUI mode. Run a single task.
-        asyncio.run(run_gui_instance(args.headless, args.instance_id))
+        asyncio.run(run_gui_instance(args.headless, args.instance_id, args.concurrent, args.total))
     else:
-        # If no instance_id, run in standalone mode with original logic.
         asyncio.run(run_standalone(args.concurrent, args.headless, args.total))
 # if __name__ == "__main__":
 #     parser = argparse.ArgumentParser()

@@ -18,4 +18,5 @@ dependencies = [
     "psutil>=7.0.0",
     "pywin32>=310",
     "scipy>=1.16.0",
+    "ttkbootstrap>=1.14.0",
 ]

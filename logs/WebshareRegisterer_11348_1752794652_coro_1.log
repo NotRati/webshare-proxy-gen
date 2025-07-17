@@ -1,0 +1,24 @@
+2025-07-18 03:24:17,108 [INFO] Coroutine 1 started with instance ID: 11348_1752794652_coro_1
+2025-07-18 03:24:25,447 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-18 03:24:28,007 [INFO] ✅ Generated random proxy: 'http://fruscfff:9w55b4egopav@107.172.163.27:6543'
+2025-07-18 03:24:32,812 [INFO] Generated Email: marigold_radiantly817@simplelogin.com (Alias ID: 29996637)
+2025-07-18 03:24:32,812 [INFO] Starting Webshare registration for Email: marigold_radiantly817@simplelogin.com
+2025-07-18 03:24:33,558 [INFO] Navigating to Webshare registration page...
+2025-07-18 03:24:34,752 [INFO] Filling out registration form...
+2025-07-18 03:24:44,920 [INFO] Submitting registration form...
+2025-07-18 03:24:48,793 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-18 03:24:49,743 [INFO] Switching to audio challenge...
+2025-07-18 03:24:51,361 [INFO] Audio challenge attempt 1/3
+2025-07-18 03:24:51,374 [INFO] ❌ Couldn't evade bot detection returning without solving
+2025-07-18 03:24:51,459 [ERROR] Registration failed: ❌ Couldn't solve Captcha.
+Traceback (most recent call last):
+  File "C:\Users\Magda\Documents\Scripts\webshare-proxy-gen\main.py", line 478, in register
+    raise RuntimeError("❌ Couldn't solve Captcha.")
+RuntimeError: ❌ Couldn't solve Captcha.
+2025-07-18 03:24:51,459 [ERROR] Failed to take screenshot: Page.screenshot: Target page, context or browser has been closed
+2025-07-18 03:24:51,459 [INFO] Cleaning up alias: marigold_radiantly817@simplelogin.com
+2025-07-18 03:24:51,459 [INFO] ✅ Got already generated random proxy: 'http://xesaxfiy:ttg16xaemk8c@206.41.172.74:6634'
+2025-07-18 03:24:53,487 [INFO] Deletion request sent for alias: marigold_radiantly817@simplelogin.com
+2025-07-18 03:24:53,501 [INFO] Total process finished in 36.39 seconds.
+2025-07-18 03:24:53,501 [INFO] Coroutine 1 completed.
+2025-07-18 03:24:53,501 [INFO] ---DONE LOGGER---
