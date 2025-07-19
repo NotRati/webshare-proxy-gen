@@ -59,4 +59,4 @@ async def check_proxies_from_file(
 
 # Example usage
 if __name__ == "__main__":
-    print(asyncio.run(check_proxies_from_file("proxies.json", "1proxies.json", timeout_seconds=5, max_proxies=None)))
+    asyncio.run(check_proxies_from_file("proxies.json", "proxies.json", timeout_seconds=5, max_proxies=None))

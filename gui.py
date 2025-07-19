@@ -61,7 +61,7 @@ class LogTailer(threading.Thread):
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("Modern Process Launcher")
+        self.root.title("Cybork bangbang")
         self.root.geometry("1000x700")
 
         self.processes = []
@@ -135,7 +135,7 @@ class App:
 
     def schedule_log_clear(self, text_widget):
         """Schedules a specific log widget to be cleared after 2 seconds."""
-        self.root.after(2000, lambda: self.clear_log_widget(text_widget))
+        self.root.after(100, lambda: self.clear_log_widget(text_widget))
 
     def clear_log_widget(self, text_widget):
         """Clears the content of a single log text widget."""

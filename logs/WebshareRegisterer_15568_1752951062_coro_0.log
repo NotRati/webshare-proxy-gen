@@ -1,0 +1,317 @@
+2025-07-19 22:51:07,432 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:51:07,432 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:51:10,111 [INFO] ✅ Generated random proxy: 'http://xesaxfiy:ttg16xaemk8c@142.147.128.93:6593'
+2025-07-19 22:51:14,811 [INFO] Generated Email: bobbing_backboard729@simplelogin.com (Alias ID: 30065549)
+2025-07-19 22:51:14,812 [INFO] Starting Webshare registration for Email: bobbing_backboard729@simplelogin.com
+2025-07-19 22:51:15,555 [INFO] Self headless is true
+2025-07-19 22:51:17,216 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:51:19,116 [INFO] Filling out registration form...
+2025-07-19 22:51:26,743 [INFO] Submitting registration form...
+2025-07-19 22:51:30,742 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:51:32,576 [INFO] Switching to audio challenge...
+2025-07-19 22:51:34,523 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:51:36,670 [INFO] Transcription result: 'It's like great cameras.'
+2025-07-19 22:51:43,905 [INFO] Post Data:{"email":"bobbing_backboard729@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA4EXXc940CYkcD_JUNMCF1wVMTqQpyE7B_E-smtzpCne_gWY_J1ZtDmr_Jb_zrvdxhSpBem_6UAN21EkonfO49APmBKnPlF18beJRJ9fjcuU7GyP1cnbY_Kba52bSY_NXTUIyPhlTT4QpZxF8msz0kJjgGVmj8yn0iCAkfO41NAH3ifa97pHyPo0FsPRhPvHoiuGM1Oos2hrbO2bgcIxFmbaN74Xoy7nKAOYxEynJrcDEuU-LfY00SkB-B4lsxpumAXvnVdJsbHwuJqbhunKcdOGsmyE09G4u4GXJDJCVNmMsd_AOLPjZ-X-p2Ndut0F0na00b3-zXz96l0CTwEerdhqSoG2SkbV0oaoADVGVAb2QyQ6RKigab0S-AZmZbWyQ_CD_E6lYAwqo2IHx8Nad6XlPzXgO2kO8_jaEEhsvngAAcfk9pg8DF3YtWu9bfYDzVWugtmA-IS1c5BlZ4hloZuO-Nkw3IFByviH_NsXPZB_kLvNMcSfbVqCVIRPealYgxAcIY6PVoW2xSkuua4e33cbE-mE715nUfOalS9MdWTOAzKe8jTY3udexEdt2YWsgKqM53F68ooiQ0s8jSNi516yftY2suaGQCRsut5vXQd8IumpF6aZ7GpejI-Jj1itgrCkmC-axuKMTWz3M4Skdp-o3Hz4b2IalUNiAY9h5E9a2DsSmpmbTpKzLQQL3K6wPHxW6KUVcskq7QepFFgwXNbf7yJF3KHxVbvB6FZtwERLEGw9sfiRkN1DkUHYqERhhwFy-O-n95eoOfZNfXA7X1rDXyWuVvSIefphitYqtu4ciMkzTwPx-9Bes9ROCausSjMEVrbAifW3AXSKwmrHwVUHb5N0vS8T22tewAKUraYOABpf0o2QuPabwer8OQEntmnxDMXGXWmVG0DOYDbAezv0OngTZ64wE5jUTfRARHoOHCDfr50hVZ51vV_Dertebj-mokx"}
+2025-07-19 22:51:44,536 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:51:44,537 [INFO] Captcha solved successfully.
+2025-07-19 22:51:44,537 [INFO] Captcha solving process completed.
+2025-07-19 22:51:44,537 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:51:44,537 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:51:44,537 [INFO] ✅ Got already generated random proxy: 'http://vcpsubcm:gnuzcamq3euv@38.154.227.167:5868'
+2025-07-19 22:52:03,303 [INFO] Registration successful, token: iovgyvwzxtuojooqredzfgxzizxt4rwketdsxx6j
+2025-07-19 22:52:04,128 [INFO] Proxy list fetch status: 200
+2025-07-19 22:52:04,129 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:51:48.136266-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:50:24.300988-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:51:18.510102-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:50:29.721676-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:50:59.465726-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:49:45.617527-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:51:30.745454-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:49:47.620094-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:51:43.346518-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:50:16.345330-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:52:04,141 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:52:04,395 [INFO] Cleaning up alias: bobbing_backboard729@simplelogin.com
+2025-07-19 22:52:04,395 [INFO] ✅ Got already generated random proxy: 'http://csdbuted:z7rejcd46av6@38.154.227.167:5868'
+2025-07-19 22:52:06,682 [INFO] Deletion request sent for alias: bobbing_backboard729@simplelogin.com
+2025-07-19 22:52:06,684 [INFO] Total process finished in 59.25 seconds.
+2025-07-19 22:52:06,684 [INFO] Coroutine 0 completed.
+2025-07-19 22:52:06,684 [INFO] ---DONE LOGGER---
+2025-07-19 22:52:09,557 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:52:09,557 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:52:11,416 [INFO] ✅ Generated random proxy: 'http://huyytzxr:l6k2vb53bsl2@206.41.172.74:6634'
+2025-07-19 22:52:15,567 [INFO] Generated Email: tiring_fanatic483@simplelogin.com (Alias ID: 30065594)
+2025-07-19 22:52:15,568 [INFO] Starting Webshare registration for Email: tiring_fanatic483@simplelogin.com
+2025-07-19 22:52:16,470 [INFO] Self headless is true
+2025-07-19 22:52:17,177 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:52:18,892 [INFO] Filling out registration form...
+2025-07-19 22:52:24,310 [INFO] Submitting registration form...
+2025-07-19 22:52:27,852 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:52:29,787 [INFO] Switching to audio challenge...
+2025-07-19 22:52:31,810 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:52:34,163 [INFO] Transcription result: 'Generator manufacturing level.'
+2025-07-19 22:52:40,376 [INFO] Post Data:{"email":"tiring_fanatic483@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA53Fg5_Z5p07IgURCNWVYOPomPUIjajYl1PAbtqlWOAqiNo521_q6kdutUUfZKNW5n52n6cVF6vTzrgPkA5ViDXsDTQLTB70itc5BP21YsC507FVU32k4p1tp4glRw7V2o-hrGR-NIhZeRVJ9K3ux6KOCgusewoplslKMRCyyV80CSuNknm7SR8XI4HjoGJ1GhB4PHpD7F-psdbXfcPbfkZoT2BlL5__S_A9T6TbpLUZHI2nuswo6luipXRWXXG7j3-9oCbwBS7-QA5lQCp5l22YzHA75Adv-AxEYxAuw8pCeLzQYX3_NqrOriEBLbwIeSFCrs4aGfktCjEKRHQWuppSsWzuRlfK7w3mWzBCZCevmjF9QAVuFMSV1QyJoZtLcvMG4fGTrZsEDA-o3sXHWaRiBgSRgyOlmk_jIB4uPnugijxDNFCLlTdIWWSNcKZ-P2C4SBVLLoeOi96LfnPNQIbjsG06Ye-hZCvZcPOGmu8DeZ8HvSRQfDSA1EWktF2FyX4l9LrSalxWgTUhrZJftf7z5s_3wZuKgzQRoH52RntE8c0pEmupJFTbixb4KIzoImR5hywzAqJO7hqUM8VgDOZH80FGJ6dfhAHt_bAJyEAJjfqcG4B2ha5w60c5OZL7Ae1H-jmQFr-j7qCHlMcetQR6VNd_9lDRq0IeaE9doehHq0QAOcg68K9NcnoACpb6cn6tZDK3QmV9li3PsNZE6dwy90gLJs4jlGBfIaZZn7hNINTLQKggfBIp-Hmyw4WzWkG6ttjS--PgAH1a1eS8BpMg8MTWaFYrmqcILrAlWuLf2Qri4QRGFN-hRDJRdyBNtvrPO1ApCOt_zvm9w3L7c77u9lyG1HBYgaQJw1EldcJDNGCnyE65v_1inrBDRYVlXXMnZ70JRr_UBqRn48Yo7hjMKO5lyFBOIuNmmMpmQGyolkoJzJyoJMZ342whHiLoFAwn_Yc"}
+2025-07-19 22:52:42,375 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:52:42,376 [INFO] Captcha solved successfully.
+2025-07-19 22:52:42,376 [INFO] Captcha solving process completed.
+2025-07-19 22:52:42,376 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:52:42,376 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:52:42,376 [INFO] ✅ Got already generated random proxy: 'http://vcpsubcm:gnuzcamq3euv@142.147.128.93:6593'
+2025-07-19 22:53:02,471 [ERROR] HTTP error on register attempt 1: 400 - {"email":[{"message":"Email address already exists.","code":"invalid"}]}
+2025-07-19 22:53:02,471 [ERROR] Attempt 1 failed with error: Client error '400 Bad Request' for url 'https://proxy.webshare.io/api/v2/register/'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-19 22:53:02,472 [INFO] Retrying in 2 seconds...
+2025-07-19 22:53:08,108 [INFO] Registration successful, token: n3ol1f0um8kivuaolevomwr57c1bwvo8d0o93k9z
+2025-07-19 22:53:09,001 [INFO] Proxy list fetch status: 200
+2025-07-19 22:53:09,001 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:51:48.136266-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:52:41.381128-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:51:18.510102-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:52:46.722862-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:50:59.465726-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:52:00.044059-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:51:30.745454-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:52:03.433051-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:51:43.346518-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:52:34.869708-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:53:09,010 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:53:09,191 [INFO] Cleaning up alias: tiring_fanatic483@simplelogin.com
+2025-07-19 22:53:09,191 [INFO] ✅ Got already generated random proxy: 'http://csdbuted:z7rejcd46av6@216.10.27.159:6837'
+2025-07-19 22:53:11,910 [INFO] Deletion request sent for alias: tiring_fanatic483@simplelogin.com
+2025-07-19 22:53:11,913 [INFO] Total process finished in 62.36 seconds.
+2025-07-19 22:53:11,913 [INFO] Coroutine 0 completed.
+2025-07-19 22:53:11,913 [INFO] ---DONE LOGGER---
+2025-07-19 22:53:11,913 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:53:11,913 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:53:14,605 [INFO] ✅ Generated random proxy: 'http://vysgznag:ydgh3jpdceli@38.154.227.167:5868'
+2025-07-19 22:53:18,921 [INFO] Generated Email: flatfoot_acrobat427@simplelogin.com (Alias ID: 30065641)
+2025-07-19 22:53:18,922 [INFO] Starting Webshare registration for Email: flatfoot_acrobat427@simplelogin.com
+2025-07-19 22:53:19,503 [INFO] Self headless is true
+2025-07-19 22:53:20,088 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:53:21,402 [INFO] Filling out registration form...
+2025-07-19 22:53:26,720 [INFO] Submitting registration form...
+2025-07-19 22:53:30,205 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:53:31,228 [INFO] Switching to audio challenge...
+2025-07-19 22:53:33,453 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:53:35,194 [INFO] Transcription result: 'had enough color contrast.'
+2025-07-19 22:53:39,277 [INFO] Post Data:{"email":"flatfoot_acrobat427@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA40iO3ggzJvAlz4fhOFYLvNAFzSuVqnFvHaJIgoRB5057BciMQQ8bQbLFaJiboWmeiTAgwwvq_66DNEK0HTPGWuiSkLXF0DXdzCTXa-8kXGHFysKFm0jxVvtePMCTU5kAndmzXc0Tfg5l_hUSbjo0EO5bxjrs1xIkZ1TabamyJJeflZ0ofUyV521cUML_Mjh--Agd_uPOhu26t4WEbiueOPQ77x9I_wn37EghcC8kN8wyIOE_ElzJcrKDzNo_ow71KAXyoMyyx58IWaimueE-y8TuHh7YJL-XXre-vMBK3I_ewL8us7xLcWJKdxCP8yzaQJMcSXLCh78KDCBQCFj-aeO3ZhTLOAKeWrJ6o8XHMx3I56eaVTayRijlc6NPwRUPDLIASTC6_ZDBDCJb_o9lfO6GZiEGjZ_DB7HdWV-a-oXrJaLsECCbH-S5sH7iVjBJD3ylTyyZG_ALfLYlyeJruMXPTTX3yLPJ5ozC9F8bXKgJWRKHOYmmT75l5Gvt7ApaLFIaJ-v0fK7kdjQD2TsQ2gC2-_ezXB2yEUR0-GeWOyLUTrmgn8JqpxOIVFajE5FU38hR81k8hxNOZN025FYPkP2BJnjuMmwyJMIwbhEb4WYuFip0puDboZ9mo2WE6Ei6bN_zUCAFjWBedZ2ZybWJpd97YGvdWymOYNz3OzJQIJWdngh5pSX7ILj-0K4UBojEAYdcrjX4OvVVeON2Mgx-N_VkH_r0CvqwVG1rN98I5fU0ci6yqv2qmhvPfUmvtrGdYVehhx2pSMvGFS5mdzqrWc7lBEAl9E5F_UhvbxCgQdqfvEQ5p89U2y64gnDMKy_qOKz3yCNxw3wQJ4aiFwB2Em3rNnf_XI0ZUDKs1oX1E_AS__8cQnPRkJp-F4ztlFZqrYDbxqAPG_a4T36jzMKMCoYzmJPFT2t8rJpqnIkJW7HzIGrHI9SzqjM3ZxFLsAF3psL7-y"}
+2025-07-19 22:53:41,096 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:53:41,096 [INFO] Captcha solved successfully.
+2025-07-19 22:53:41,096 [INFO] Captcha solving process completed.
+2025-07-19 22:53:41,096 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:53:41,096 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:53:41,096 [INFO] ✅ Got already generated random proxy: 'http://grigjaho:r4yicfvit8wq@45.38.107.97:6014'
+2025-07-19 22:53:58,884 [INFO] Registration successful, token: yg136ruzl0het70i870vk1aku98nqz3m0nztf1x6
+2025-07-19 22:53:59,633 [INFO] Proxy list fetch status: 200
+2025-07-19 22:53:59,633 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:51:48.136266-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:52:41.381128-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:53:36.333737-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:52:46.722862-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:53:14.942616-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:52:00.044059-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:53:49.845444-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:52:03.433051-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:51:43.346518-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:52:34.869708-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:53:59,641 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:53:59,925 [INFO] Cleaning up alias: flatfoot_acrobat427@simplelogin.com
+2025-07-19 22:53:59,927 [INFO] ✅ Got already generated random proxy: 'http://csdbuted:z7rejcd46av6@23.95.150.145:6114'
+2025-07-19 22:54:02,753 [INFO] Deletion request sent for alias: flatfoot_acrobat427@simplelogin.com
+2025-07-19 22:54:02,755 [INFO] Total process finished in 50.84 seconds.
+2025-07-19 22:54:02,755 [INFO] Coroutine 0 completed.
+2025-07-19 22:54:02,755 [INFO] ---DONE LOGGER---
+2025-07-19 22:54:08,240 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:54:08,240 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:54:10,226 [INFO] ✅ Generated random proxy: 'http://vcpsubcm:gnuzcamq3euv@142.147.128.93:6593'
+2025-07-19 22:54:14,573 [ERROR] Fatal error during email generation: Could not find new alias container on dashboard.
+Traceback (most recent call last):
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 213, in _generate_email
+    if not div: raise RuntimeError("Could not find new alias container on dashboard.")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Could not find new alias container on dashboard.
+2025-07-19 22:54:14,574 [ERROR] Registration failed: Could not find new alias container on dashboard.
+Traceback (most recent call last):
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 376, in register
+    alias_info = await self._generate_email()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 213, in _generate_email
+    if not div: raise RuntimeError("Could not find new alias container on dashboard.")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Could not find new alias container on dashboard.
+2025-07-19 22:54:14,575 [INFO] Total process finished in 6.33 seconds.
+2025-07-19 22:54:14,575 [INFO] Coroutine 0 completed.
+2025-07-19 22:54:14,575 [INFO] ---DONE LOGGER---
+2025-07-19 22:55:09,411 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:55:09,411 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:55:13,699 [INFO] ✅ Generated random proxy: 'http://qxpfzwhj:ykbomuntungo@198.23.239.134:6540'
+2025-07-19 22:55:18,578 [INFO] Generated Email: sprawl_reload283@simplelogin.com (Alias ID: 30065703)
+2025-07-19 22:55:18,580 [INFO] Starting Webshare registration for Email: sprawl_reload283@simplelogin.com
+2025-07-19 22:55:20,590 [INFO] Self headless is true
+2025-07-19 22:55:21,633 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:55:23,275 [INFO] Filling out registration form...
+2025-07-19 22:55:28,779 [INFO] Submitting registration form...
+2025-07-19 22:55:32,416 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:55:33,971 [INFO] Switching to audio challenge...
+2025-07-19 22:55:36,123 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:55:42,063 [INFO] Transcription result: 'each and<|en|>'
+2025-07-19 22:55:51,145 [WARNING] CAPTCHA challenge frame is still visible. Not solved yet.
+2025-07-19 22:55:51,145 [WARNING] Verification failed, trying new audio.
+2025-07-19 22:55:51,145 [INFO] Audio challenge attempt 2/3
+2025-07-19 22:55:53,202 [INFO] Transcription result: 'The original inspector about'
+2025-07-19 22:55:57,392 [INFO] Post Data:{"email":"sprawl_reload283@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA7uJzRsyQ13eDEcKnvvcU3-RCA74clgShBQ1gvcCs7Q3ABBRCP_SrMyTKtoNKuFFc7IsgDXpsqVT4mctGtWmQ4uDQnWzjMRR_pRo8C7e2gfgEslilAPzHRpHJ3KRJXhkY_vHyCngKXJbLFsUUleqZ4uPiLguTjm5j7RCjf47_a2v8x5drsNYOX4MerL-u65tjRil2lQM6EAkjc63jV-X72TuoJO_Q4zEBxyqDIhCRtZMRQCGN60D0Tv0zsmUx6865pbuXqKWnTIIn5FBDHU4oieep1u0czBhMd9B691hZr32VMVHrMouPhT0V0mdCIZ_7nPem8mLvOBHYb-TDqp42UcgemV3C48wRMVciBFBJAUCm450ZmCvY3AN5Ox2IGj1vwwgRcPFTKFfGy_lrp6aVGzP2BE5H0856WK8G23VctsmYnnBhEM1HaozeGm7xvRymsVUYbLqM1mfQIQnQPUJKUtXhND67Pf-KLXWTPmxNLn2PGWxqAXFP0gLiTAVb3gd4ct2SjwEktAMJBRtmdrJ_BwicklT2XkreSGrs2aMxPu5jKvOxQn2rAf6opU8KPaCdS06JTxBLZk-zjRnRCiCRaC8M0c8-OWSWGt6nDpE3-QzoYU5NPQMeU7_IcAeQl4DLYLT4oj6OfnmhcXQAJTIF0o-GTXu-KTqXiIaUTeNXbBlHHAU-4u9p3RD8RaYW9EjCnnQ8GYvdm4kvHHMfci0V6zpiLbK_whOmjzkH_C_zSh-wLDCRR4RPDxk1Bl3YF9IHyQxOQiHshDMCK4Vqp1Mt0no_dUh-whxvCBK7zgS_oZsIy0lfqfU9pGVzITB4UQE5pSlTfZqxk7u86M51iRcF4iYyfV9EIu2vM5xI1xdqmnpRvYnL-uFXHIrS26fYFh-uaKf071VyIp_PLGcjIM-_Y7OX38n-IDKFgGU37888lNKZP9jgpcsiXzaLOcziRmKERQeUBw"}
+2025-07-19 22:55:59,666 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:55:59,666 [INFO] Captcha solved successfully.
+2025-07-19 22:55:59,666 [INFO] Captcha solving process completed.
+2025-07-19 22:55:59,666 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:55:59,666 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:55:59,666 [INFO] ✅ Got already generated random proxy: 'http://ycsuksyr:53xkbu136lzx@23.95.150.145:6114'
+2025-07-19 22:56:18,878 [ERROR] HTTP error on register attempt 1: 400 - {"email":[{"message":"Email address already exists.","code":"invalid"}]}
+2025-07-19 22:56:18,879 [ERROR] Attempt 1 failed with error: Client error '400 Bad Request' for url 'https://proxy.webshare.io/api/v2/register/'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-19 22:56:18,879 [INFO] Retrying in 2 seconds...
+2025-07-19 22:56:23,862 [INFO] Registration successful, token: bvutj9yechxl9w061zetith74cp35atzfliwjzum
+2025-07-19 22:56:24,707 [INFO] Proxy list fetch status: 200
+2025-07-19 22:56:24,707 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:54:07.669936-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:55:00.001054-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:55:56.492053-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:55:09.189689-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:55:34.329592-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:54:17.389040-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:56:10.525063-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:54:30.374426-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:53:59.004739-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:54:55.583953-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:56:24,716 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:56:25,007 [INFO] Cleaning up alias: sprawl_reload283@simplelogin.com
+2025-07-19 22:56:25,007 [INFO] ✅ Got already generated random proxy: 'http://huyytzxr:l6k2vb53bsl2@142.147.128.93:6593'
+2025-07-19 22:56:27,273 [INFO] Deletion request sent for alias: sprawl_reload283@simplelogin.com
+2025-07-19 22:56:27,275 [INFO] Total process finished in 77.86 seconds.
+2025-07-19 22:56:27,275 [INFO] Coroutine 0 completed.
+2025-07-19 22:56:27,275 [INFO] ---DONE LOGGER---
+2025-07-19 22:56:27,276 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:56:27,276 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:56:29,812 [INFO] ✅ Generated random proxy: 'http://uewdtvxv:2v6p751jrj3b@107.172.163.27:6543'
+2025-07-19 22:56:34,477 [INFO] Generated Email: scandal_uncrown082@simplelogin.com (Alias ID: 30065759)
+2025-07-19 22:56:34,478 [INFO] Starting Webshare registration for Email: scandal_uncrown082@simplelogin.com
+2025-07-19 22:56:35,203 [INFO] Self headless is true
+2025-07-19 22:56:36,432 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:56:37,572 [INFO] Filling out registration form...
+2025-07-19 22:56:43,657 [INFO] Submitting registration form...
+2025-07-19 22:56:47,605 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:56:48,854 [INFO] Switching to audio challenge...
+2025-07-19 22:56:50,616 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:56:52,700 [INFO] Transcription result: 'In fact, our prices are...'
+2025-07-19 22:56:58,406 [INFO] Post Data:{"email":"scandal_uncrown082@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA4prWzsdLCshz6F5lbga-kZd2NZw7DH5a6K7CKcoMlxLneuLZxvm-D0gHCxnOqQ0NsY4J4dGjxK9fgwpdcz4YlyxK7WX0yoETdq-msSnuwGxPFgt5VVeFRss9gZ6zJc04TMyFcnseLdahHmz41YpdKTvLaoR1ZQyTn1DDUUb6myb_FlE_iealjZb_V0UKMfh6mLjzNGz2dMs8GmKEupg_EQZAlMJ71FN_cAdpiycjeHLzRvOsjKozrbhv3pG3nJ7e4zXuYTmAY4oWyTD2hFNg2R_R-HQg6_R4T9UuUsAGRFN0K-buqD5g6dA2tMFgS-fWQBzo_o9_Lg8DN2uwDCZN1pd8mAGe5iLhnK_kTZW9qfZWAvtc1o1mHWITdN7QvMcnvzlCTT6g515WOX8TpXClGYjY0ZIT0shvfz5ktVgL6kE5z-dnAH_P7XET4ONFnOfWMuwJAiycVAnr_F018CGWN8-apzxc9ugSqSiOySHYOpgBhlLSemIvo0tIHcx1H_FM1jzacimbM3lpLIUbhcXBQEdVx7EmbniWiltErSJj_ysazKLAYhcBJMg_NR9bSg0xehBhVQ7jGbuFlXcLFx04op9JapXcNnrLtxRkBOf_AbZoHWHQY9fxZH6kWInT1Al3h9IYteQB8_rsmRk_3aSIbjYFElmxwBKZoXVo6K913yRonk-PvX7E-YKpyaMqYBuNqrIkeoydeuUxlwDrkGG9c7Z-cAnkGrBQHTTP0_1WvNozZ2LRmmgZZavN7sRNRLlsnBNf-ZvHnvgc5amMwWqiU3ciBWkIVeNiBfb286KGfJLNU6ECZV9EBoKaoh2z6d8SYc-I94pMPcp5Z9Bv_672gbMlYojHWnBPOIjZbcgtDOd2lE2nr1jHlG_1A_tO5qln4idwkY6cMFJQY4R3YRC4WH2N_Xz3S6z13kh14GQvPuQF6S58ASaAdGBT7U0J5B7WPgUFkv"}
+2025-07-19 22:57:01,035 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:57:01,035 [INFO] Captcha solved successfully.
+2025-07-19 22:57:01,035 [INFO] Captcha solving process completed.
+2025-07-19 22:57:01,035 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:57:01,035 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:57:01,035 [INFO] ✅ Got already generated random proxy: 'http://ehztbehm:ry2444y66wok@216.10.27.159:6837'
+2025-07-19 22:57:22,535 [ERROR] Attempt 1 failed with error: 
+2025-07-19 22:57:22,535 [INFO] Retrying in 2 seconds...
+2025-07-19 22:57:27,560 [INFO] Registration successful, token: 9nbpuvugpdv86fy6wd3ssgt3rqtjva16fwuxalq0
+2025-07-19 22:57:28,812 [INFO] Proxy list fetch status: 200
+2025-07-19 22:57:28,813 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:56:30.999359-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:55:00.001054-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:55:56.492053-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:55:09.189689-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:55:34.329592-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:56:39.677509-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:56:10.525063-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:56:55.117447-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:56:21.920350-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:54:55.583953-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:57:28,822 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:57:29,028 [INFO] Cleaning up alias: scandal_uncrown082@simplelogin.com
+2025-07-19 22:57:29,028 [INFO] ✅ Got already generated random proxy: 'http://kofvpfnt:wtlx6p6hgdvc@45.38.107.97:6014'
+2025-07-19 22:57:30,534 [INFO] Deletion request sent for alias: scandal_uncrown082@simplelogin.com
+2025-07-19 22:57:30,535 [INFO] Total process finished in 63.26 seconds.
+2025-07-19 22:57:30,535 [INFO] Coroutine 0 completed.
+2025-07-19 22:57:30,535 [INFO] ---DONE LOGGER---
+2025-07-19 22:57:34,306 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:57:34,306 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:57:36,542 [INFO] ✅ Generated random proxy: 'http://csdbuted:z7rejcd46av6@107.172.163.27:6543'
+2025-07-19 22:57:41,441 [INFO] Generated Email: cautious_cataract083@simplelogin.com (Alias ID: 30065792)
+2025-07-19 22:57:41,442 [INFO] Starting Webshare registration for Email: cautious_cataract083@simplelogin.com
+2025-07-19 22:57:42,025 [INFO] Self headless is true
+2025-07-19 22:57:42,796 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:57:43,946 [INFO] Filling out registration form...
+2025-07-19 22:57:50,951 [INFO] Submitting registration form...
+2025-07-19 22:57:54,772 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:57:56,011 [INFO] Switching to audio challenge...
+2025-07-19 22:57:58,421 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:58:00,327 [INFO] Transcription result: 'The newer computers.'
+2025-07-19 22:58:06,049 [INFO] Post Data:{"email":"cautious_cataract083@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA65unYuz5SMTfuicghh5toVv5I43Gq0MSefNL0OTa7RC3p_R-b0_y7qdGNMoRJYNjbt8CcJIA4u3s2CFMxmGkY3gUao-VMT5MI456hThRjwVdoYRQYDZUJUDFI-tiFcA2CZ2OQsc9X55ZS_PLWhws-S4kbSeNsPi8iH5eWZ_eTqxyaaILf4fu-BiBosM_n5GDMVHrCzpIdy7FpNnMOVg-1OuVhe4JMwuVZDTJgUVXNcVkizYfAyqsoIrbXUlkgALmYU7vU_wXAkFZtMSw3BC1-ImQeVLpgWKsI4tmTLfyUKtknOZZ3q9OboynBE1OVGBA6DgAUwFWZOHv17un_cnlnDWKw7NroLYrHKSH_CDIUpHER-F1CaIuQxA_akSUK8uPq4-X4x5fQbISHmPgHr6IuQZ6Q6o5t_lejq6Y-h8ZIsgjXK5JIGqcQN_eKmcvP7kOzOaVYeKe_eicNRwNPV2Gc7yCm7HL56Fox3T9a8SyA-S-9pCICfeL4jLgnqkj1sP-wsr17xFUaWjQ0vk8vGu656aErBC7oh6O-S49ZvtIVFT17K4ai7vCT6_0EqRaGTEATDn70NHBZzYT_hWkmaNcLsSROYPR5Bd4oGlfs9syzYWULO53WCPYOYyvPfUETwIzG2E0GIiNKeB9l9yB4jFOwfsz1hmKGzzGZX4Ksm0pQ4CPA3JGLzOaYyaiQGbuxj0G0RwcNGxaayP_H4_gH3sHkuXJJW8UlhuqTQNbVSEBgEObgf3GjwOCJVa3U-ZC8UevV0b6ljxBhZm8vt2i6cTEIhuDU9WJJZmxazViwj8a8i83fpXMzSMsm1f2kxtIrw9X3TOndqJKVNwdmf0xu1zqfZu-ucueAELrv7i1sNOrOKNvq0Iwj5S_UmM5Qm8BcovPQGi7zg-kVnk_DZIqDnx-D1eX6F-6ddfKzHRai9R2dGBEclAxVwub9XvQwPoimdRP6QSb_y"}
+2025-07-19 22:58:07,878 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 22:58:07,878 [INFO] Captcha solved successfully.
+2025-07-19 22:58:07,878 [INFO] Captcha solving process completed.
+2025-07-19 22:58:07,878 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 22:58:07,878 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 22:58:07,878 [INFO] ✅ Got already generated random proxy: 'http://oaahgiar:xtuxe4slpivb@107.172.163.27:6543'
+2025-07-19 22:58:26,721 [INFO] Registration successful, token: 4ndunej3ippo83z1qqtrrn5qelejr1lhaqzpvovy
+2025-07-19 22:58:27,467 [INFO] Proxy list fetch status: 200
+2025-07-19 22:58:27,467 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:56:30.999359-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:57:25.710027-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:55:56.492053-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T11:57:30.560497-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:57:51.699162-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:56:39.677509-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:56:10.525063-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:56:55.117447-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:56:21.920350-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:57:28.636112-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 22:58:27,478 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 22:58:27,674 [INFO] Cleaning up alias: cautious_cataract083@simplelogin.com
+2025-07-19 22:58:27,674 [INFO] ✅ Got already generated random proxy: 'http://vcpsubcm:gnuzcamq3euv@142.147.128.93:6593'
+2025-07-19 22:58:29,982 [INFO] Deletion request sent for alias: cautious_cataract083@simplelogin.com
+2025-07-19 22:58:29,984 [INFO] Total process finished in 55.68 seconds.
+2025-07-19 22:58:29,984 [INFO] Coroutine 0 completed.
+2025-07-19 22:58:29,984 [INFO] ---DONE LOGGER---
+2025-07-19 22:58:34,908 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:58:34,908 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:58:37,582 [INFO] ✅ Generated random proxy: 'http://kofvpfnt:wtlx6p6hgdvc@38.154.227.167:5868'
+2025-07-19 22:58:41,936 [INFO] Generated Email: outhouse_procreate749@simplelogin.com (Alias ID: 30065820)
+2025-07-19 22:58:41,938 [INFO] Starting Webshare registration for Email: outhouse_procreate749@simplelogin.com
+2025-07-19 22:58:42,627 [INFO] Self headless is true
+2025-07-19 22:58:43,395 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:58:44,618 [INFO] Filling out registration form...
+2025-07-19 22:58:52,213 [INFO] Submitting registration form...
+2025-07-19 22:58:55,917 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 22:58:57,079 [INFO] Switching to audio challenge...
+2025-07-19 22:58:59,098 [INFO] Audio challenge attempt 1/3
+2025-07-19 22:58:59,107 [INFO] ❌ Couldn't evade bot detection returning without solving
+2025-07-19 22:58:59,296 [ERROR] Registration failed: ❌ Couldn't solve Captcha.
+Traceback (most recent call last):
+  File "C:\Users\Me\Workspace\Coding\webshare proxy generator\main.py", line 478, in register
+    raise RuntimeError("❌ Couldn't solve Captcha.")
+RuntimeError: ❌ Couldn't solve Captcha.
+2025-07-19 22:58:59,296 [INFO] Cleaning up alias: outhouse_procreate749@simplelogin.com
+2025-07-19 22:58:59,296 [INFO] ✅ Got already generated random proxy: 'http://huismfzh:b7drpw5fnlg0@198.23.239.134:6540'
+2025-07-19 22:59:01,598 [INFO] Deletion request sent for alias: outhouse_procreate749@simplelogin.com
+2025-07-19 22:59:01,600 [INFO] Total process finished in 26.69 seconds.
+2025-07-19 22:59:01,600 [INFO] Coroutine 0 completed.
+2025-07-19 22:59:01,600 [INFO] ---DONE LOGGER---
+2025-07-19 22:59:37,737 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 22:59:37,737 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 22:59:40,639 [INFO] ✅ Generated random proxy: 'http://oaahgiar:xtuxe4slpivb@107.172.163.27:6543'
+2025-07-19 22:59:45,622 [INFO] Generated Email: overpower_unissued000@simplelogin.com (Alias ID: 30065857)
+2025-07-19 22:59:45,623 [INFO] Starting Webshare registration for Email: overpower_unissued000@simplelogin.com
+2025-07-19 22:59:46,267 [INFO] Self headless is true
+2025-07-19 22:59:47,512 [INFO] Navigating to Webshare registration page...
+2025-07-19 22:59:48,721 [INFO] Filling out registration form...
+2025-07-19 22:59:55,121 [INFO] Submitting registration form...
+2025-07-19 22:59:58,798 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 23:00:00,057 [INFO] Switching to audio challenge...
+2025-07-19 23:00:02,446 [INFO] Audio challenge attempt 1/3
+2025-07-19 23:00:04,375 [INFO] Transcription result: 'which evaluates to'
+2025-07-19 23:00:07,920 [INFO] Post Data:{"email":"overpower_unissued000@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA6jxo-BKbCjrfpm-5IACEtlPjntXLNU7a6Bl479fNkzsmVW5p6fiGcceMTTsQtqVc6KUvp6m4sG8VvyaI98SQl_tHuvNu0aLi18f8oJ4L1BYiGMyeI_xegOXSH6plZcxiEyK81j5kZjZpqPiKOCGdRVdqzXkW52BObRVEmDVsGQjRrqVN4obOBoJLqosU1pssTnrCw9aRR3wKyoz1iA6ahnkU5gQ1kUoK9SZsGDbNvFXIP0DbXRKeQ82k-r1tXVJyeYxpLGZ9iuYPGID5zplWBa5pO9bPng4COn90-mFaX8w0h_DUh1fFQYderMjUwnqvieUSnnfQfV7PpTNQQ0VpnzQetS4sAYACOrY6J3YTw59mBgDSBvmSs2fyj0KsDEy4KsIlQGPlcYA8I4zN2PaLAzyLvTSZtvDiENKL-rDamALMNa9u5xUgPMuKqMRBZGDMrOKugH9f1Lr3u0adEbO1lJ4JThiIt7q5LRCJfAFcvc5lKjaWCM-B5Wb6-fRay_VOB0F3Ft1bpKcvjnsZ-QyiZcXCx7QcYD35yez2q5L5nIA_IXtlT7qk-bUTOdKLt33CuDEfNSfpTnx7fBFQQp8VLR8khhHWs1jjIL5JoU1scqQtWDr4Cq1swHLIBX35AOzyahnOXSCRL_7GtRHuapadqcXjmQMYhEMjO3Ic3pmJVuRAawxucsNjZa8sdh3NQpGMJnfiMyoKOxOUKpxFKkK2ISjHWhQK-aiAseV2sa58qMIllmNWMoJOZsKDD58-W2-aB3o4H-NYvva9L2XMrhRrOc3Lwjk4D7KgtmBz87UMxMjGYOMgN0ltdT7BxUCsSDW6kyWjP5lyAo9qYmAVauQaUJNZFoMYSIjXyaJHlpfHYqWo0WLopC68vkCaWQuoplcsTcK-owp62_vBHS46Z7BMTwzY9jw_8P8FIuASFTqAP6x4L1Zo2eXbQG1v7BDi2WOPi0AFjF"}
+2025-07-19 23:00:10,336 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 23:00:10,336 [INFO] Captcha solved successfully.
+2025-07-19 23:00:10,336 [INFO] Captcha solving process completed.
+2025-07-19 23:00:10,336 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 23:00:10,336 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 23:00:10,336 [INFO] ✅ Got already generated random proxy: 'http://hqtbaimo:4qibqifcb0aw@216.10.27.159:6837'
+2025-07-19 23:00:28,863 [INFO] Registration successful, token: wh0bb4jrtggasab62p0dnk7owxkzlmuxofxrivcn
+2025-07-19 23:00:30,060 [INFO] Proxy list fetch status: 200
+2025-07-19 23:00:30,060 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T11:58:58.706293-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:59:56.222144-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T11:58:22.482558-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T12:00:01.375732-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T11:57:51.699162-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T11:59:08.242893-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T11:58:39.874649-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T11:59:23.060576-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T11:58:50.153180-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:59:59.194656-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 23:00:30,070 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 23:00:30,272 [INFO] Cleaning up alias: overpower_unissued000@simplelogin.com
+2025-07-19 23:00:30,272 [INFO] ✅ Got already generated random proxy: 'http://oaahgiar:xtuxe4slpivb@142.147.128.93:6593'
+2025-07-19 23:00:33,334 [INFO] Deletion request sent for alias: overpower_unissued000@simplelogin.com
+2025-07-19 23:00:33,336 [INFO] Total process finished in 55.6 seconds.
+2025-07-19 23:00:33,336 [INFO] Coroutine 0 completed.
+2025-07-19 23:00:33,336 [INFO] ---DONE LOGGER---
+2025-07-19 23:00:36,719 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 23:00:36,719 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 23:00:42,766 [INFO] ✅ Generated random proxy: 'http://uewdtvxv:2v6p751jrj3b@45.38.107.97:6014'
+2025-07-19 23:00:49,775 [INFO] Generated Email: headstone_unpack225@simplelogin.com (Alias ID: 30065897)
+2025-07-19 23:00:49,776 [INFO] Starting Webshare registration for Email: headstone_unpack225@simplelogin.com
+2025-07-19 23:00:50,444 [INFO] Self headless is true
+2025-07-19 23:00:51,226 [INFO] Navigating to Webshare registration page...
+2025-07-19 23:00:52,354 [INFO] Filling out registration form...
+2025-07-19 23:00:59,502 [INFO] Submitting registration form...
+2025-07-19 23:01:02,977 [INFO] CAPTCHA challenge detected. Attempting to solve...
+2025-07-19 23:01:04,260 [INFO] Switching to audio challenge...
+2025-07-19 23:01:06,226 [INFO] Audio challenge attempt 1/3
+2025-07-19 23:01:15,205 [INFO] Transcription result: 'In the weekend, many), my mum, bought for me for an капine yar scoop and rescued of the water and had life under nature. In the rain gr jeste weekend, I won't lose my sister.'
+2025-07-19 23:01:54,362 [WARNING] Could not perform human-like typing: Locator.press: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("iframe[title*=\"recaptcha challenge\"]").content_frame.locator("#audio-response")
+    63 × locator resolved to <input dir="ltr" type="text" autocorrect="off" autocomplete="off" spellcheck="false" id="audio-response" autocapitalize="off" class="rc-response-input-field" aria-labelledby="rc-response-input-label"/>
+     - elementHandle.press("к")
+
+2025-07-19 23:02:00,948 [WARNING] CAPTCHA challenge frame is still visible. Not solved yet.
+2025-07-19 23:02:00,948 [WARNING] Verification failed, trying new audio.
+2025-07-19 23:02:00,948 [INFO] Audio challenge attempt 2/3
+2025-07-19 23:02:02,581 [INFO] Transcription result: 'curvature and once'
+2025-07-19 23:02:06,524 [INFO] Post Data:{"email":"headstone_unpack225@simplelogin.com","password":"bangbang!","tos_accepted":true,"recaptcha":"03AFcWeA74zplrGIDBGAzkmzKTYAmvHGldFaSdBaLTVkw5ibLbPHdf_htFk220CBwzY4gETVPPlcJO5yN4dkN9aUHtUfJ7wxiqeQNzwYS4f1hbtLQ_sReQdyzgLP22K378UeA2DCJ36ZyaRhwAVKyVXHUB4cdZ2hWR8Fk06wawbs6G_FSFUSKE3h-F3n5pFVSur18C8OKJn4uApn5anCxZALkiZPlM5AQs42EvoyzYs-LFmIOjPPfXF7qhdY801Z7FwRL1tt5ryqZCZDZj2lahX-O_yhIaZMS0vLPqhTM0glNmhzfSKoxV4NRnvgQHxjpIAEX2ix2d2QGe32KbWoS6CKGDJX_cHp_FXh2S5uTXE_KNOqVepqEDeF78OPNRSvG3Yo4P1-3qo2bk5RVHH90vNNtRHbEGVZDbcTyhOxDGtZ5CWcOr9B7D8_VmA0iYz6GoOsf9ROEAahBkVlUUEfx5RbrFaItyTkYVtsIO2wcBIOc6PMvyzXQTBQ4sb5IHWXbQm5gtx_bRF6mdnkkQIoi0yj4TqsqXnxZ22kXUK61dT_X_b0BxTB88PKmWh2_A9N45RfwFZ4SiY7s0DvskqNTMtgt-UheiyI3WNztBikSD_nwWDer1Gfu0cpMLjpUDY44nJkkVGnBu-Mm3RxND7KzvSkGTRDZ-KxxCQbz4xLYwtdxipi-9VSqn46RHg4wOXY6yUAA7ocy8dproOftq4aHjRlXuOXtDRAY6WAQSJ2ge5l7D5Z5GHoQR5lVktEaICWlgy8dVkp_yOU353aU6T1Ghu5tKV5ubu74SnZgaFCCSAr5kg_0pOqjZsFcWi048cDiwvCoXGuWfUZKNg4N3M7lHvLiXUhO4h-Tfj1NrUK4Wl-0wPNPfiyIMRTBdrB2C91F-8Y9taEI12qp8PHW3grd08wRW0HpB72xUfEEVw_x6oWEh0vpBk729jtJH4jAaTl6uoVq-febM6z52"}
+2025-07-19 23:02:08,662 [INFO] Captcha appears to be solved (challenge frame is hidden).
+2025-07-19 23:02:08,662 [INFO] Captcha solved successfully.
+2025-07-19 23:02:08,662 [INFO] Captcha solving process completed.
+2025-07-19 23:02:08,662 [INFO] ✅ Registration and CAPTCHA successfully completed. Now waiting for register data.
+2025-07-19 23:02:08,662 [INFO] ✅ Got future resutlt. Continuing.
+2025-07-19 23:02:08,662 [INFO] ✅ Got already generated random proxy: 'http://oaahgiar:xtuxe4slpivb@38.154.227.167:5868'
+2025-07-19 23:02:11,311 [INFO] Registration successful, token: fzfnvstyszbutz8a6iwjr59lh7w5mq00dbpplsfh
+2025-07-19 23:02:12,146 [INFO] Proxy list fetch status: 200
+2025-07-19 23:02:12,147 [INFO] Proxy list response text: {"count":10,"next":null,"previous":null,"results":[{"id":"d-17058603863","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"38.154.227.167","port":5868,"valid":true,"last_verification":"2025-07-19T12:01:32.861959-07:00","country_code":"US","city_name":"Piscataway","asn_name":"Server-Mania","asn_number":55286,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"},{"id":"d-17072372059","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"23.95.150.145","port":6114,"valid":true,"last_verification":"2025-07-19T11:59:56.222144-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-07-13T06:21:49.346204-07:00"},{"id":"d-16844894371","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"198.23.239.134","port":6540,"valid":true,"last_verification":"2025-07-19T12:00:55.469345-07:00","country_code":"US","city_name":"Buffalo","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-04-30T06:20:46.914965-07:00"},{"id":"d-17077247211","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"45.38.107.97","port":6014,"valid":true,"last_verification":"2025-07-19T12:00:01.375732-07:00","country_code":"GB","city_name":"London","asn_name":"Uk-2 Limited","asn_number":13213,"high_country_confidence":true,"created_at":"2025-07-17T04:56:50.014516-07:00"},{"id":"d-16862068918","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"207.244.217.165","port":6712,"valid":true,"last_verification":"2025-07-19T12:00:25.102084-07:00","country_code":"HR","city_name":"Zagreb","asn_name":"Trafficforce, Uab","asn_number":133944,"high_country_confidence":false,"created_at":"2025-05-06T01:09:06.753213-07:00"},{"id":"d-16863761523","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"107.172.163.27","port":6543,"valid":true,"last_verification":"2025-07-19T12:01:44.390760-07:00","country_code":"US","city_name":"Bloomingdale","asn_name":"As-Colocrossing","asn_number":36352,"high_country_confidence":true,"created_at":"2025-05-06T14:18:20.759618-07:00"},{"id":"d-16691384278","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"216.10.27.159","port":6837,"valid":true,"last_verification":"2025-07-19T12:01:16.116591-07:00","country_code":"US","city_name":"Dallas","asn_name":"As-Coloam","asn_number":21769,"high_country_confidence":true,"created_at":"2025-03-08T02:23:38.166035-08:00"},{"id":"d-16891359562","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"136.0.207.84","port":6661,"valid":true,"last_verification":"2025-07-19T12:01:58.458253-07:00","country_code":"US","city_name":"Orem","asn_name":"Egihosting","asn_number":18779,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-16891359564","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"142.147.128.93","port":6593,"valid":true,"last_verification":"2025-07-19T12:01:23.574354-07:00","country_code":"US","city_name":"Ashburn","asn_name":"Ntt-Data-2914","asn_number":2914,"high_country_confidence":true,"created_at":"2025-05-15T14:41:59.583872-07:00"},{"id":"d-17058603862","username":"oaahgiar","password":"xtuxe4slpivb","proxy_address":"206.41.172.74","port":6634,"valid":true,"last_verification":"2025-07-19T11:59:59.194656-07:00","country_code":"FR","city_name":"Paris","asn_name":"Geekyworks It Solutions Pvt Ltd","asn_number":203999,"high_country_confidence":true,"created_at":"2025-07-01T20:38:01.493920-07:00"}]}
+2025-07-19 23:02:12,159 [INFO] Saved 10 proxies to proxies.json
+2025-07-19 23:02:12,369 [INFO] Cleaning up alias: headstone_unpack225@simplelogin.com
+2025-07-19 23:02:12,369 [INFO] ✅ Got already generated random proxy: 'http://wenwzvwn:j6aonf9md48j@136.0.207.84:6661'
+2025-07-19 23:02:15,120 [INFO] Deletion request sent for alias: headstone_unpack225@simplelogin.com
+2025-07-19 23:02:15,122 [INFO] Total process finished in 98.4 seconds.
+2025-07-19 23:02:15,123 [INFO] Coroutine 0 completed.
+2025-07-19 23:02:15,123 [INFO] ---DONE LOGGER---
+2025-07-19 23:02:15,124 [INFO] Coroutine 0 started with instance ID: 15568_1752951062_coro_0
+2025-07-19 23:02:15,124 [INFO] Attempting to generate a new email alias via SimpleLogin...
+2025-07-19 23:02:17,839 [INFO] ✅ Generated random proxy: 'http://tyrcjtwf:4r5va9ymm9k5@38.154.227.167:5868'
+2025-07-19 23:02:22,716 [INFO] Generated Email: overturn_theology989@simplelogin.com (Alias ID: 30065952)
+2025-07-19 23:02:22,716 [INFO] Starting Webshare registration for Email: overturn_theology989@simplelogin.com
+2025-07-19 23:02:23,352 [INFO] Self headless is true
+2025-07-19 23:02:23,944 [INFO] Navigating to Webshare registration page...
+2025-07-19 23:02:25,098 [INFO] Filling out registration form...

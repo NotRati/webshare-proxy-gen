@@ -492,9 +492,7 @@ class WebshareRegisterer:
                     await self.cleanup_alias(alias_info)
                 except Exception as e:
                     self.logger.warning(f"⚠️ Could not delete alias. Error: {e}")
-
-            if self._browser:
-                await self._browser.close()
+                    
             time_taken = round(time() - start_time, 2)
             self.logger.info(f"Total process finished in {time_taken} seconds.")
 
