@@ -259,7 +259,7 @@ class App:
         self.root.destroy()
 
 if __name__ == "__main__":
-    root = ttk.Window(themename="cyborg")
+    root = ttk.Window(themename="vapor")
     app = App(root)
     root.protocol("WM_DELETE_WINDOW", app.on_close)
     root.mainloop()

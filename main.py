@@ -1,17 +1,20 @@
 # webshare_registerer.py
-
+# https://relay.firefox.com/accounts/profile/? #TODO
 import asyncio
 import logging
 import random
 import os
 import math
 import json
+import string
 # import win32gui, win32con, win32process
 from time import time
 from typing import Dict, Any, Optional
 import re
 import psutil
 import argparse
+import traceback
+from datetime import datetime, timedelta, timezone
 
 import proxy_checker
 from playwright_stealth import Stealth
@@ -29,7 +32,22 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
 ]
+class ColoredFormatter(logging.Formatter):
+    COLORS = {
+        logging.ERROR: "\033[38;2;128;0;0m",    # Red
+        logging.CRITICAL: "\033[38;2;128;0;0m", # Red
+        logging.WARNING: "\033[33m",  # Yellow
+        logging.INFO: "\033[0m",      # Default (reset)
+        logging.DEBUG: "\033[0m",     # Default (reset)
+    }
+    RESET = "\033[0m"
 
+    def format(self, record):
+        color = self.COLORS.get(record.levelno, self.RESET)
+        message = super().format(record)
+        return f"{color}{message}{self.RESET}"
+def _rand_str(length:int = 10):
+    return ''.join([random.choice(string.ascii_lowercase) for _ in range(length)])
 class WebshareRegisterer:
     """
     A class to automate the registration process on Webshare.io,
@@ -47,7 +65,12 @@ class WebshareRegisterer:
     WEBSHARE_REGISTER_API_URL = "https://proxy.webshare.io/api/v2/register/"
     WEBSSHARE_REGISTER_URL = "https://dashboard.webshare.io/register/"
     WEBSSHARE_PROXY_LIST_URL = "https://proxy.webshare.io/api/v2/proxy/list/?mode=direct&page=1&page_size=10"
+    
     _email_generation_lock = asyncio.Lock()
+    _proxy_lock = asyncio.Lock()
+    proxies = []
+    _last_load_time = None
+    _reload_interval = timedelta(minutes=1)
 
     def __init__(
         self,
@@ -57,13 +80,10 @@ class WebshareRegisterer:
         proxy_file: str = "proxies.json",
         instance_id=None
     ):
-        self.valid_proxies = None
         self.proxy_file_path = proxy_file
         self.headless = headless
         self.whisper_model = whisper_model
         self.verbose = verbose
-        self.SET_SECOND = False
-        self._event_close = asyncio.Event()
         self._event_request_catched = asyncio.Future()
         log_identifier = instance_id if instance_id is not None else id(self)
         self.logger = self.setup_logger(log_identifier)
@@ -74,6 +94,59 @@ class WebshareRegisterer:
         self._mouse_x = random.uniform(100, 300)
         self._mouse_y = random.uniform(100, 300)
         asyncio.create_task(self.log_and_flush_loop())
+
+    @classmethod
+    async def create(
+        cls,
+        headless: bool = False,
+        whisper_model: str = "base",
+        verbose: bool = False,
+        proxy_file: str = "proxies.json",
+        instance_id=None
+    ):
+        self = cls(
+            headless=headless,
+            whisper_model=whisper_model,
+            verbose=verbose,
+            proxy_file=proxy_file,
+            instance_id=instance_id
+        )
+        await self.setup_client()  
+        return self
+    async def load_proxies_if_needed(self):
+        async with type(self)._proxy_lock:
+            now = datetime.now(timezone.utc)
+            if (
+                not type(self).proxies
+                or type(self)._last_load_time is None
+                or now - type(self)._last_load_time > type(self)._reload_interval
+            ):
+                type(self).proxies = await proxy_checker.check_proxies_from_file(
+                    logger=self.logger,
+                    input_file=self.proxy_file_path,
+                    output_file=self.proxy_file_path
+                )
+                type(self)._last_load_time = now
+    async def setup_client(self):
+        try:
+            await self.load_proxies_if_needed()
+
+            if type(self).proxies:
+                proxy_info = random.choice(type(self).proxies)
+                proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
+                self.client = httpx.AsyncClient(
+                    proxy=proxy_url,
+                    headers={"user-agent": random.choice(USER_AGENTS)},
+                    timeout=30
+                )
+            else:
+                self.client = httpx.AsyncClient(
+                    headers={"user-agent": random.choice(USER_AGENTS)},
+                    timeout=30
+                )
+        except Exception as e:
+            self.logger.critical(f"❌ Couldn't setup httpx client: {e}")
+            raise RuntimeError(e)
     def setup_logger(self, identifier):
         class_name = self.__class__.__name__
         log_dir = "logs"
@@ -84,19 +157,16 @@ class WebshareRegisterer:
         logger.setLevel(logging.INFO)
 
         if not logger.handlers:
-            # 2. This is the crucial change: Use the identifier for the file path.
-            # Now the file name is predictable (e.g., WebshareRegisterer_8888_0.log)
             log_path = os.path.join(log_dir, f"{class_name}_{identifier}.log")
-            
-            # Ensure the file is cleared for each new run
             file_handler = logging.FileHandler(log_path, mode='w', encoding='utf-8')
             formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(message)s')
             file_handler.setFormatter(formatter)
             logger.addHandler(file_handler)
 
-            # Optional: Keep console logging for direct debugging
+            # Colored formatter for console only
             console_handler = logging.StreamHandler()
-            console_handler.setFormatter(formatter)
+            colored_formatter = ColoredFormatter('%(asctime)s - [%(levelname)s] - %(message)s')
+            console_handler.setFormatter(colored_formatter)
             logger.addHandler(console_handler)
 
             logger.propagate = False
@@ -183,81 +253,55 @@ class WebshareRegisterer:
         except Exception as e:
             self.logger.warning(f"Could not perform human-like typing: {e}")
 
-    async def _generate_email(self, *args) -> Dict[str, Any]:
+    async def _generate_email(self) -> Dict[str, Any]:
         async with self._email_generation_lock:
             self.logger.info("Attempting to generate a new email alias via SimpleLogin...")
-            self.valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
-            proxy_info = random.choice(self.valid_proxies)
-            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
-
             try:
-                async with httpx.AsyncClient(proxy=proxy_url) as client:
-                    response = await client.get('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)})
-                    response.raise_for_status()
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    csrf_token = soup.find("input", attrs={"name": "csrf_token"}).get("value")
-                    
-                    data = {'csrf_token': csrf_token, 'email': 'ardoteliratilol@gmail.com', 'password': 'rati1234'}
-                    await client.post('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)}, data=data, follow_redirects=True)
-                    
-                    response = await client.get('https://app.simplelogin.io/dashboard/', follow_redirects=True)
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    csrf_token_dashboard = soup.find("input", attrs={"name": "csrf_token"}).get("value")
-                    
-                    data = {'csrf_token': csrf_token_dashboard, 'form-name': 'create-random-email'}
-                    response = await client.post('https://app.simplelogin.io/dashboard/', data=data, follow_redirects=True)
-                    
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    div = soup.find("div", id=re.compile(r"^alias-container-\d+"))
-                    if not div: raise RuntimeError("Could not find new alias container on dashboard.")
+                response = await self.client.get('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)})
+                response.raise_for_status()
+                soup = BeautifulSoup(response.text, 'html.parser')
+                csrf_token = soup.find("input", attrs={"name": "csrf_token"}).get("value")
+                
+                data = {'csrf_token': csrf_token, 'email': 'shiu93306@gmail.com', 'password': 'rati1234'}
+                await self.client.post('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)}, data=data, follow_redirects=True)
+                
+                response = await self.client.get('https://app.simplelogin.io/dashboard/', follow_redirects=True)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                csrf_token_dashboard = soup.find("input", attrs={"name": "csrf_token"}).get("value")
+                
+                data = {'csrf_token': csrf_token_dashboard, 'form-name': 'create-random-email'}
+                response = await self.client.post('https://app.simplelogin.io/dashboard/', data=data, follow_redirects=True)
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                div = soup.find("div", id=re.compile(r"^alias-container-\d+"))
+                if not div: raise RuntimeError("Could not find new alias container on dashboard.")
 
-                    alias_id = div['id'].split("alias-container-")[1]
-                    email_span = div.find("span", class_="font-weight-bold")
-                    email = email_span.text.strip() if email_span else None
-                    if not email: raise RuntimeError("Could not extract email address from new alias.")
-                    
-                    self.logger.info(f"Generated Email: {email} (Alias ID: {alias_id})")
-                    return {'email': email, 'alias_id': alias_id, 'alias_name': email, 'csrf_token': csrf_token_dashboard, 'cookies': client.cookies}
+                alias_id = div['id'].split("alias-container-")[1]
+                email_span = div.find("span", class_="font-weight-bold")
+                email = email_span.text.strip() if email_span else None
+                if not email: raise RuntimeError("Could not extract email address from new alias.")
+                
+                self.logger.info(f"Generated Email: {email} (Alias ID: {alias_id})")
+                return {'email': email, 'alias_id': alias_id, 'alias_name': email, 'csrf_token': csrf_token_dashboard, 'cookies': self.client.cookies}
             except Exception as e:
                 self.logger.error(f"Fatal error during email generation: {e}", exc_info=True)
                 raise
-
     async def cleanup_alias(self, alias_info: Dict[str, Any]):
-        if self.valid_proxies is None:
-            valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
-            proxy_info = random.choice(valid_proxies)
-            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
-        else:
-            proxy_info = random.choice(self.valid_proxies)
-            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-            self.logger.info(f"✅ Got already generated random proxy: '{proxy_url}'")
-
-        async with httpx.AsyncClient(cookies=alias_info['cookies'], proxy=proxy_url) as client:
-            delete_data = {
-                'csrf_token': alias_info['csrf_token'],
-                'form-name': 'delete-alias',
-                'alias-id': alias_info['alias_id'],
-                'alias': alias_info['alias_name'],
-            }
-            await client.post(
-                'https://app.simplelogin.io/dashboard/',
-                headers={'User-Agent': random.choice(USER_AGENTS)},
-                data=delete_data,
-                follow_redirects=True,
-            )
-            self.logger.info(f"Deletion request sent for alias: {alias_info['alias_name']}")
-
-    async def _is_captcha_solved_on_page(self, page: Page) -> bool:
-        try:
-            await page.locator("text=Creating Your Proxy List...").wait_for(timeout=2000)
-            return True
-        except Exception:
-            if await page.locator("text=Try again later").is_visible():
-                raise RuntimeError("Recaptcha has blocked this IP or browser profile.")
-            return False
-
+        self.logger.info(f"Trying to delete alias {alias_info['alias_name']}")
+        delete_data = {
+            'csrf_token': alias_info['csrf_token'],
+            'form-name': 'delete-alias',
+            'alias-id': alias_info['alias_id'],
+            'alias': alias_info['alias_name'],
+        }
+        await self.client.post(
+            'https://app.simplelogin.io/dashboard/',
+            headers={'User-Agent': random.choice(USER_AGENTS)},
+            data=delete_data,
+            follow_redirects=True,
+            cookies=alias_info['cookies']
+        )
+        self.logger.info(f"Deletion request sent for alias: {alias_info['alias_name']}")
     async def start_routing(self):
         await self._page.route(
             "**/*",
@@ -266,79 +310,71 @@ class WebshareRegisterer:
     
     async def manual_register(self, post_data: str):
         max_retries = 3
-        if self.valid_proxies is None:
-            valid_proxies = await proxy_checker.check_proxies_from_file(self.proxy_file_path, self.proxy_file_path, max_proxies=None)
-            proxy_info = random.choice(valid_proxies)
-            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-            self.logger.info(f"✅ Generated random proxy: '{proxy_url}'")
-        else:
-            proxy_info = random.choice(self.valid_proxies)
-            proxy_url = f"http://{proxy_info['username']}:{proxy_info['password']}@{proxy_info['proxy_address']}:{proxy_info['port']}"
-            self.logger.info(f"✅ Got already generated random proxy: '{proxy_url}'")
         for attempt in range(1, max_retries + 1):
             try:
-                async with httpx.AsyncClient(timeout=20, proxy=proxy_url) as client:
-                    response = await client.post(
-                        self.WEBSHARE_REGISTER_API_URL,
-                        json=json.loads(post_data),
-                        headers={"user-agent": random.choice(USER_AGENTS)},
-                        follow_redirects=True,
-                    )
-                    
-                    try:
-                        response.raise_for_status()
-                    except httpx.HTTPStatusError as e:
-                        self.logger.error(f"HTTP error on register attempt {attempt}: {e.response.status_code} - {e.response.text}")
-                        raise  # re-raise after logging
-                    
-                    if response.status_code == 200:
-                        json_data = response.json()
-                        self.token = json_data.get('token')
-                        self.logger.info(f"Registration successful, token: {self.token}")
-                    else:
-                        self.logger.warning(f"Unexpected status code on register attempt {attempt}: {response.status_code}")
-                        return False
+                response = await self.client.post(
+                    self.WEBSHARE_REGISTER_API_URL,
+                    json=json.loads(post_data),
+                    headers={"user-agent": random.choice(USER_AGENTS)},
+                    follow_redirects=True,
+                )
+                
+                try:
+                    response.raise_for_status()
+                except httpx.HTTPStatusError as e:
+                    self.logger.error(f"HTTP error on register attempt {attempt}: {e.response.status_code} - {e.response.text}")
+                    raise  # re-raise after logging
+                
+                if response.status_code == 200:
+                    json_data = response.json()
+                    self.token = json_data.get('token')
+                    self.logger.info(f"Registration successful, token: {self.token}")
+                else:
+                    self.logger.warning(f"Unexpected status code on register attempt {attempt}: {response.status_code}")
+                    return False
 
-                    self.WEBSHARE_PROXY_HEADERS['authorization'] = self.WEBSHARE_PROXY_HEADERS['authorization'].replace("%token%", self.token)
-                    self.WEBSHARE_PROXY_HEADERS['User-Agent'] = random.choice(USER_AGENTS)
+                copied_headers = self.WEBSHARE_PROXY_HEADERS.copy()
 
-                    response = await client.get(
-                        url=self.WEBSSHARE_PROXY_LIST_URL,
-                        params=self.WEBSHARE_PROXY_PARAMS,
-                        headers=self.WEBSHARE_PROXY_HEADERS,
-                        follow_redirects=True,
-                    )
+                copied_headers['authorization'] = self.WEBSHARE_PROXY_HEADERS['authorization'].replace("%token%", self.token)
+                copied_headers['User-Agent'] = random.choice(USER_AGENTS)
 
-                    self.logger.info(f"Proxy list fetch status: {response.status_code}")
-                    self.logger.info(f"Proxy list response text: {response.text}")
-                    json_body = response.json()
-                    extracted = []
-                    for proxy in json_body['results']:
-                        extracted.append(proxy)
+                response = await self.client.get(
+                    url=self.WEBSSHARE_PROXY_LIST_URL,
+                    params=self.WEBSHARE_PROXY_PARAMS,
+                    headers=copied_headers,
+                    follow_redirects=True,
+                )
 
-                    data = []
-                    if os.path.exists(self.proxy_file_path):
-                        with open(self.proxy_file_path, "r") as f:
-                            try:
-                                existing_data = json.load(f)
-                                if isinstance(existing_data, list):
-                                    data.extend(existing_data)
-                            except json.JSONDecodeError:
-                                pass
+                self.logger.info(f"Proxy list fetch status: {response.status_code}")
+                self.logger.info(f"Proxy list response text: {response.text}")
+                json_body = response.json()
+                extracted = []
+                for proxy in json_body['results']:
+                    extracted.append(proxy)
 
-                    # ❌ Wrong: data.append(extracted) → creates a nested list
-                    # ✅ Correct: flatten by using extend
-                    data.extend(extracted)
+                data = []
+                if os.path.exists(self.proxy_file_path):
+                    with open(self.proxy_file_path, "r") as f:
+                        try:
+                            existing_data = json.load(f)
+                            if isinstance(existing_data, list):
+                                data.extend(existing_data)
+                        except json.JSONDecodeError:
+                            pass
 
-                    with open(self.proxy_file_path, "w") as f:
-                        json.dump(data, f, indent=2)
+                data.extend(extracted)
 
-                    self.logger.info(f"Saved {len(extracted)} proxies to {self.proxy_file_path}")
+                with open(self.proxy_file_path, "w") as f:
+                    json.dump(data, f, indent=2)
 
-                    return True
+                self.logger.info(f"Saved {len(extracted)} proxies to {self.proxy_file_path}")
+
+                return True
             
-            except (httpx.HTTPStatusError, httpx.RequestError, httpx.ReadTimeout) as e:
+            except Exception as e:
                 self.logger.error(f"Attempt {attempt} failed with error: {e}")
+                self.logger.error(traceback.format_exc())
+
                 if attempt == max_retries:
                     self.logger.error("Max retries reached. Giving up.")
                     return False
@@ -373,9 +409,10 @@ class WebshareRegisterer:
         start_time = time()
         alias_info = None
         try:
-            alias_info = await self._generate_email()
-            email = alias_info['email']
-            password = "bangbang!"
+            # alias_info = await self._generate_email()
+            # email = alias_info['email']
+            email = _rand_str(8) + "@simplelogin.com"
+            password = _rand_str(6) + "A!"
 
             self.logger.info(f"Starting Webshare registration for Email: {email}")
             async with Stealth().use_async(async_playwright()) as p:
@@ -396,59 +433,6 @@ class WebshareRegisterer:
                     java_script_enabled=True,
                 )
                 
-                # Add anti-detection scripts on new pages
-                # self._context.on("page", lambda page: page.add_init_script(script=ANTI_DETECTION_JS))
-                
-                ANTI_DETECTION_JS = """
-                (() => {
-                    // Pass the webdriver check
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => false,
-                    });
-
-                    // Pass the plugins check
-                    Object.defineProperty(navigator, 'plugins', {
-                        get: () => [1, 2, 3, 4, 5],
-                    });
-
-                    // Pass the languages check
-                    Object.defineProperty(navigator, 'languages', {
-                        get: () => ['en-US', 'en'],
-                    });
-
-                    // Overwrite the chrome runtime object
-                    window.chrome = {
-                        runtime: {},
-                        // add more chrome properties if needed
-                    };
-
-                    // Mock permissions query to avoid detection
-                    const originalQuery = window.navigator.permissions.query;
-                    window.navigator.permissions.query = (parameters) => (
-                        parameters.name === 'notifications' ?
-                            Promise.resolve({ state: Notification.permission }) :
-                            originalQuery(parameters)
-                    );
-
-                    // Pass the iframe check
-                    Object.defineProperty(window, 'frameElement', {
-                        get: () => null,
-                    });
-
-                    // Mock WebGL vendor and renderer
-                    const getParameter = WebGLRenderingContext.prototype.getParameter;
-                    WebGLRenderingContext.prototype.getParameter = function(parameter) {
-                        if (parameter === 37445) {
-                            return 'Intel Inc.'; // UNMASKED_VENDOR_WEBGL
-                        }
-                        if (parameter === 37446) {
-                            return 'Intel Iris OpenGL Engine'; // UNMASKED_RENDERER_WEBGL
-                        }
-                        return getParameter(parameter);
-                    };
-                })();
-                """
-                
                 self._page = await self._context.new_page()
                 asyncio.create_task(self.start_routing())
 
@@ -465,20 +449,19 @@ class WebshareRegisterer:
                 self._mouse_x, self._mouse_y = await self._human_like_mouse_move(self._page, submit_button_locator, self._mouse_x, self._mouse_y)
                 await submit_button_locator.click()
 
-                if not await self._is_captcha_solved_on_page(self._page):
-                    self.logger.info("CAPTCHA challenge detected. Attempting to solve...")
-                    solver = RecaptchaAudioSolver(
-                        self, self._page, self._mouse_x, self._mouse_y,
-                        whisper_model=self.whisper_model, verbose=self.verbose
-                    )
-                    solved = await solver.solve()
-                    if solved:
-                        self.logger.info("Captcha solving process completed.")
-                    else:
-                        raise RuntimeError("❌ Couldn't solve Captcha.")
-                self.logger.info("✅ Registration and CAPTCHA successfully completed. Now waiting for register data.")
+                self.logger.info("Attempting to solve CAPTCHA challange...")
+                solver = RecaptchaAudioSolver(
+                    self, self._page, self._mouse_x, self._mouse_y,
+                    whisper_model=self.whisper_model, verbose=self.verbose
+                )
+                solved = await solver.solve()
+                if solved:
+                    self.logger.info("Captcha solving process completed.")
+                else:
+                    raise RuntimeError("❌ Couldn't solve Captcha.")
+                self.logger.info("Registration successfully completed. Now waiting for register data.")
                 register_payload_data = await self._event_request_catched
-                self.logger.info(f"✅ Got future resutlt. Continuing.")
+                self.logger.info(f"Got post data result. Continuing.")
                 await self.manual_register(register_payload_data)
                 return True
 
@@ -502,7 +485,7 @@ async def main(concurrent: int, headless: bool, total: int):
         batch_size = min(concurrent, total - completed) if total != -1 else concurrent
         tasks = []
         for _ in range(batch_size):
-            registerer = WebshareRegisterer(verbose=True, headless=headless)
+            registerer = await WebshareRegisterer.create(verbose=True, headless=headless)
             task = asyncio.create_task(registerer.register())
             tasks.append(task)
 
@@ -537,7 +520,7 @@ async def run_gui_instance(headless: bool, instance_id: str, concurrent: int = 1
         logger.addHandler(file_handler)
 
         # Instantiate your existing class with the coro_instance_id and headless mode
-        registerer = WebshareRegisterer(verbose=True, headless=headless, instance_id=coro_instance_id)
+        registerer = await WebshareRegisterer.create(verbose=True, headless=headless, instance_id=coro_instance_id)
         registerer.logger = logger  # Inject our file logger
 
         try:
@@ -575,7 +558,7 @@ async def run_standalone(concurrent: int, headless: bool, total: int):
         for _ in range(batch_size):
             # In this mode, we don't pass an instance_id, so it will use the old
             # id(self) method for logging, which is fine for standalone use.
-            registerer = WebshareRegisterer(verbose=True, headless=headless)
+            registerer = await WebshareRegisterer.create(verbose=True, headless=headless)
             task = asyncio.create_task(registerer.register())
             tasks.append(task)
 
