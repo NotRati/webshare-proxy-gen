@@ -82,7 +82,7 @@ class App:
 
         ttk.Label(config_frame, text="Concurrent Splits:", font=(APP_FONT, 10)).grid(row=1, column=0, padx=5, pady=5, sticky="w")
         self.concurrent_entry = ttk.Entry(config_frame, font=(APP_FONT, 10), width=10)
-        self.concurrent_entry.insert(0, "3")
+        self.concurrent_entry.insert(0, "2")
         self.concurrent_entry.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
         ttk.Label(config_frame, text="Total Runs:", font=(APP_FONT, 10)).grid(row=2, column=0, padx=5, pady=5, sticky="w")
@@ -117,11 +117,9 @@ class App:
         self.root.bind_all("<MouseWheel>", self._on_mousewheel, add="+")
 
         self.status_var = tk.StringVar(value="Idle")
-        self.running_procs_var = tk.StringVar(value="Running processes: 0")
         status_bar = ttk.Frame(self.root, padding=5)
         status_bar.pack(fill=X, side=BOTTOM)
         ttk.Label(status_bar, textvariable=self.status_var).pack(side=LEFT, padx=10)
-        ttk.Label(status_bar, textvariable=self.running_procs_var).pack(side=LEFT, padx=10)
 
     def _on_frame_configure(self, event=None):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
@@ -211,7 +209,6 @@ class App:
         if not self.processes:
             return
         running_count = sum(1 for p in self.processes if p.poll() is None)
-        self.running_procs_var.set(f"Running processes: {running_count}")
 
         if running_count == 0:
             self.status_var.set("All processes finished.")
@@ -252,7 +249,6 @@ class App:
         self.launch_btn.config(state=NORMAL)
         self.stop_btn.config(state=DISABLED)
         self.status_var.set("Idle")
-        self.running_procs_var.set("Running processes: 0")
 
     def on_close(self):
         self.cleanup()

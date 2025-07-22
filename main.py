@@ -15,23 +15,24 @@ import psutil
 import argparse
 import traceback
 from datetime import datetime, timedelta, timezone
-
+from pathlib import Path
 import proxy_checker
 from playwright_stealth import Stealth
 from bs4 import BeautifulSoup
 import httpx
 import numpy as np
 from playwright.async_api import async_playwright, Page, FrameLocator, Locator, BrowserContext
+from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 from scipy.interpolate import PchipInterpolator
+from human_interaction import HumanInteraction
 
 # Import the separated solver class
 from recaptcha_solver import RecaptchaAudioSolver
 
 # --- Configuration ---
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-]
+with open("user_agents.txt") as f:
+    USER_AGENTS = f.read().splitlines()
+
 class ColoredFormatter(logging.Formatter):
     COLORS = {
         logging.ERROR: "\033[38;2;128;0;0m",    # Red
@@ -78,15 +79,18 @@ class WebshareRegisterer:
         whisper_model: str = "base",
         verbose: bool = False,
         proxy_file: str = "proxies.json",
-        instance_id=None
+        instance_id=None,
+        screenshots_path: str = "screenshots"
     ):
+        self.screenshots_path = screenshots_path
         self.proxy_file_path = proxy_file
         self.headless = headless
         self.whisper_model = whisper_model
         self.verbose = verbose
         self._event_request_catched = asyncio.Future()
-        log_identifier = instance_id if instance_id is not None else id(self)
-        self.logger = self.setup_logger(log_identifier)
+        self.log_identifier = instance_id if instance_id is not None else id(self)
+        self.logger = self.setup_logger(self.log_identifier)
+        self.human_interaction = HumanInteraction(logger=self.logger)
         self.WEBSHARE_PROXY_PAGE = "https://dashboard.webshare.io/proxy/list?authenticationMethod=%22username_password%22&connectionMethod=%22direct%22&proxyControl=%220%22&rowsPerPage=10&page=0&order=%22asc%22&orderBy=null&searchValue=%22%22&removeType=%22refresh_all%22"
         self._browser: Optional[BrowserContext] = None
         self._context: Optional[BrowserContext] = None
@@ -127,6 +131,16 @@ class WebshareRegisterer:
                     output_file=self.proxy_file_path
                 )
                 type(self)._last_load_time = now
+    async def take_screenshot(self, page:Page, screenshot_name:str):
+        try:
+            folder = Path(self.screenshots_path)
+            folder.mkdir(exist_ok=True)
+            await page.screenshot(path=str((folder / screenshot_name).resolve()), type='png', omit_background=True)
+            return True
+        except Exception as e:
+            self.logger.warning(f"Couldn't take screenshot: {e}")
+            return False
+        
     async def setup_client(self):
         try:
             await self.load_proxies_if_needed()
@@ -139,11 +153,13 @@ class WebshareRegisterer:
                     headers={"user-agent": random.choice(USER_AGENTS)},
                     timeout=30
                 )
+                self.logger.info(f"Using proxy: '{proxy_url}'")
             else:
                 self.client = httpx.AsyncClient(
                     headers={"user-agent": random.choice(USER_AGENTS)},
                     timeout=30
                 )
+                self.logger.warning("Using no proxy.")
         except Exception as e:
             self.logger.critical(f"❌ Couldn't setup httpx client: {e}")
             raise RuntimeError(e)
@@ -172,136 +188,12 @@ class WebshareRegisterer:
             logger.propagate = False
 
         return logger
-    async def _random_delay(self, mu: float = 0.5, sigma: float = 0.2):
-        await asyncio.sleep(max(0.1, np.random.normal(mu, sigma)))
     async def log_and_flush_loop(self):
         while True:
             for handler in self.logger.handlers:
                 if isinstance(handler, logging.FileHandler):
                     handler.flush()
             await asyncio.sleep(1)
-    async def _human_like_mouse_move(self, page: Page, locator: Locator, start_x: float, start_y: float) -> tuple[float, float]:
-        try:
-            # 1. Simulate human reaction delay
-            await asyncio.sleep(random.uniform(0.2, 0.6))
-
-            box = await locator.bounding_box()
-            if not box:
-                self.logger.warning("Could not get bounding box for mouse move.")
-                return start_x, start_y
-
-            # 2. Choose random target location inside element
-            target_x = box['x'] + box['width'] * random.uniform(0.2, 0.8)
-            target_y = box['y'] + box['height'] * random.uniform(0.2, 0.8)
-
-            # 3. Optional overshoot
-            overshoot_chance = 0.3
-            if random.random() < overshoot_chance:
-                overshoot_x = target_x + random.uniform(-10, 10)
-                overshoot_y = target_y + random.uniform(-10, 10)
-            else:
-                overshoot_x, overshoot_y = target_x, target_y
-
-            # 4. Build path with jitter and curvature
-            dist = math.hypot(overshoot_x - start_x, overshoot_y - start_y)
-            num_points = max(6, int(dist / 80))
-            x_points = np.linspace(start_x, overshoot_x, num=num_points)
-            y_points = np.linspace(start_y, overshoot_y, num=num_points)
-
-            if num_points > 2:
-                offset_boundary = max(5, dist * 0.05)
-                x_points[1:-1] += np.random.uniform(-offset_boundary, offset_boundary, num_points - 2)
-                y_points[1:-1] += np.random.uniform(-offset_boundary, offset_boundary, num_points - 2)
-
-            interp_x = PchipInterpolator(np.arange(num_points), x_points)
-            interp_y = PchipInterpolator(np.arange(num_points), y_points)
-
-            # 5. Ease-in, ease-out movement
-            steps = max(15, int(dist / random.uniform(10, 20)))
-            ease = lambda t: t * t * (3 - 2 * t)  # smoothstep function
-
-            final_x, final_y = start_x, start_y
-            for i in range(1, steps + 1):
-                t = ease(i / steps) * (num_points - 1)
-                jitter_x = random.uniform(-1.2, 1.2)
-                jitter_y = random.uniform(-1.2, 1.2)
-                final_x = interp_x(t) + jitter_x
-                final_y = interp_y(t) + jitter_y
-                await page.mouse.move(float(final_x), float(final_y))
-                await asyncio.sleep(random.uniform(0.005, 0.015))
-
-            # 6. Final correction if overshoot happened
-            if (overshoot_x, overshoot_y) != (target_x, target_y):
-                await asyncio.sleep(random.uniform(0.1, 0.3))
-                await page.mouse.move(float(target_x), float(target_y))
-
-            # 7. Optional hover pause
-            await asyncio.sleep(random.uniform(0.05, 0.2))
-
-            return float(target_x), float(target_y)
-
-        except Exception as e:
-            self.logger.warning(f"Could not perform human-like mouse move: {e}")
-            return start_x, start_y
-
-    async def _human_like_type(self, locator: Locator, text: str):
-        try:
-            await locator.click(delay=random.uniform(1, 3))
-            for char in text:
-                await locator.press(char)
-                await asyncio.sleep(random.uniform(0.02, 0.2))
-        except Exception as e:
-            self.logger.warning(f"Could not perform human-like typing: {e}")
-
-    async def _generate_email(self) -> Dict[str, Any]:
-        async with self._email_generation_lock:
-            self.logger.info("Attempting to generate a new email alias via SimpleLogin...")
-            try:
-                response = await self.client.get('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)})
-                response.raise_for_status()
-                soup = BeautifulSoup(response.text, 'html.parser')
-                csrf_token = soup.find("input", attrs={"name": "csrf_token"}).get("value")
-                
-                data = {'csrf_token': csrf_token, 'email': 'shiu93306@gmail.com', 'password': 'rati1234'}
-                await self.client.post('https://app.simplelogin.io/auth/login', headers={'User-Agent': random.choice(USER_AGENTS)}, data=data, follow_redirects=True)
-                
-                response = await self.client.get('https://app.simplelogin.io/dashboard/', follow_redirects=True)
-                soup = BeautifulSoup(response.text, 'html.parser')
-                csrf_token_dashboard = soup.find("input", attrs={"name": "csrf_token"}).get("value")
-                
-                data = {'csrf_token': csrf_token_dashboard, 'form-name': 'create-random-email'}
-                response = await self.client.post('https://app.simplelogin.io/dashboard/', data=data, follow_redirects=True)
-                
-                soup = BeautifulSoup(response.text, 'html.parser')
-                div = soup.find("div", id=re.compile(r"^alias-container-\d+"))
-                if not div: raise RuntimeError("Could not find new alias container on dashboard.")
-
-                alias_id = div['id'].split("alias-container-")[1]
-                email_span = div.find("span", class_="font-weight-bold")
-                email = email_span.text.strip() if email_span else None
-                if not email: raise RuntimeError("Could not extract email address from new alias.")
-                
-                self.logger.info(f"Generated Email: {email} (Alias ID: {alias_id})")
-                return {'email': email, 'alias_id': alias_id, 'alias_name': email, 'csrf_token': csrf_token_dashboard, 'cookies': self.client.cookies}
-            except Exception as e:
-                self.logger.error(f"Fatal error during email generation: {e}", exc_info=True)
-                raise
-    async def cleanup_alias(self, alias_info: Dict[str, Any]):
-        self.logger.info(f"Trying to delete alias {alias_info['alias_name']}")
-        delete_data = {
-            'csrf_token': alias_info['csrf_token'],
-            'form-name': 'delete-alias',
-            'alias-id': alias_info['alias_id'],
-            'alias': alias_info['alias_name'],
-        }
-        await self.client.post(
-            'https://app.simplelogin.io/dashboard/',
-            headers={'User-Agent': random.choice(USER_AGENTS)},
-            data=delete_data,
-            follow_redirects=True,
-            cookies=alias_info['cookies']
-        )
-        self.logger.info(f"Deletion request sent for alias: {alias_info['alias_name']}")
     async def start_routing(self):
         await self._page.route(
             "**/*",
@@ -405,6 +297,20 @@ class WebshareRegisterer:
                 await route.continue_()
         except Exception as e:
             self.logger.info("Error processing request:" +  str(e))
+    
+    async def detect_reload_error(self, page: Page, timeout: int = 5000) -> bool:
+        """
+        Detects if the 'Something went wrong...' error is visible on the page.
+        """
+        try:
+            locator = page.locator("text=Something went wrong. Please reload the page and try again.")
+            await locator.wait_for(timeout=timeout, state="visible")
+            return True
+        except PlaywrightTimeoutError:
+            return False
+        except Exception as e:
+            self.logger.warning(f"Error while detecting reload message: {e}")
+            return False
     async def register(self) -> bool:
         start_time = time()
         alias_info = None
@@ -439,31 +345,91 @@ class WebshareRegisterer:
 
                 self.logger.info("Navigating to Webshare registration page...")
                 await self._page.goto(self.WEBSSHARE_REGISTER_URL, wait_until="domcontentloaded", timeout=60000)
-                await self._page.mouse.move(self._mouse_x, self._mouse_y)
-                self.logger.info("Filling out registration form...")
-                await self._human_like_type(self._page.locator('input[data-testid="password-input"]'), password)
-                await self._human_like_type(self._page.locator('#email-input'), email)
+                await self._page.evaluate("""
+() => {
+  // 1. Check if a cursor already exists to avoid creating multiple.
+  if (document.getElementById('python-playwright-cursor')) {
+    return;
+  }
+
+  // 2. Create the div element for our cursor.
+  const cursorDiv = document.createElement('div');
+  cursorDiv.id = 'python-playwright-cursor'; // Give it a unique ID
+
+  // 3. Apply all the necessary styles directly.
+  Object.assign(cursorDiv.style, {
+    // Use 'fixed' positioning to place it relative to the viewport.
+    position: 'fixed',
+    top: '0px',
+    left: '0px',
+
+    // Visual appearance (let's make it green this time).
+    width: '25px',
+    height: '25px',
+    backgroundColor: 'rgba(0, 200, 100, 0.5)',
+    border: '2px solid darkgreen',
+    borderRadius: '50%',
+
+    // CRITICAL: Center the div on the actual cursor point.
+    transform: 'translate(-50%, -50%)',
+
+    // CRITICAL: Allow clicks and other events to pass through to elements underneath.
+    pointerEvents: 'none',
+
+    // Ensure the cursor is on top of all other content.
+    zIndex: '9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999'
+  });
+
+  // 4. Append the new div to the body of the document.
+  document.body.appendChild(cursorDiv);
+
+  // 5. Add an event listener to the document to track the mouse.
+  document.addEventListener('mousemove', (event) => {
+    // On every move, update the div's 'left' and 'top' style properties.
+    // This provides the raw, unsmoothed tracking as requested.
+    cursorDiv.style.left = `${event.clientX}px`;
+    cursorDiv.style.top = `${event.clientY}px`;
+  });
+}
+
+                """)
+                # await self._page.mouse.move(self._mouse_x, self._mouse_y)
+                
+                self.logger.info("Filling out email input.")
+                # await self._human_like_type(self._page.locator('#email-input'), email)
+                await self.human_interaction.human_like_type(self._page, self._page.locator('#email-input'), email)
+                
+
+                self.logger.info("Filling out password input.")
+                await self.human_interaction.human_like_type(self._page, self._page.locator('input[data-testid="password-input"]'), password)
+                # await self._page.locator('input[data-testid="password-input"]').fill(password)
+
 
                 self.logger.info("Submitting registration form...")
                 submit_button_locator = self._page.locator('button[data-testid="signup-button"]')
-                self._mouse_x, self._mouse_y = await self._human_like_mouse_move(self._page, submit_button_locator, self._mouse_x, self._mouse_y)
-                await submit_button_locator.click()
+                self._mouse_x, self._mouse_y = await self.human_interaction.human_like_mouse_move(self._page, submit_button_locator)
+                await submit_button_locator.click(click_count=2)
 
                 self.logger.info("Attempting to solve CAPTCHA challange...")
+                await asyncio.sleep(3)
                 solver = RecaptchaAudioSolver(
-                    self, self._page, self._mouse_x, self._mouse_y,
-                    whisper_model=self.whisper_model, verbose=self.verbose
+                    self, self._page,whisper_model=self.whisper_model, 
+                    verbose=self.verbose, human_interaction_arg=self.human_interaction
                 )
+                if await self.detect_reload_error(self._page):
+                    self.logger.critical("Detected reload error")
+                    return False
                 solved = await solver.solve()
                 if solved:
                     self.logger.info("Captcha solving process completed.")
                 else:
+                    await self.take_screenshot(self._page, f"Captcha failure id:{self.log_identifier}")
                     raise RuntimeError("❌ Couldn't solve Captcha.")
+
                 self.logger.info("Registration successfully completed. Now waiting for register data.")
                 register_payload_data = await self._event_request_catched
-                self.logger.info(f"Got post data result. Continuing.")
-                await self.manual_register(register_payload_data)
-                return True
+            await self.manual_register(register_payload_data)
+            return True
 
         except Exception as e:
             self.logger.error(f"Registration failed: {e}", exc_info=True)
@@ -532,16 +498,42 @@ async def run_gui_instance(headless: bool, instance_id: str, concurrent: int = 1
         finally:
             logger.info("---DONE LOGGER---")
 
+    semaphore = asyncio.Semaphore(concurrent)
+    
+
     if total == -1:
-        # Run forever, spawning the concurrent coros in each batch
-        while True:
-            await asyncio.gather(*(coro_task(i) for i in range(concurrent)))
+        slots = list(range(concurrent))  # Fixed slot indices
+        semaphore = asyncio.Semaphore(concurrent)
+        tasks = {}
+
+        async def wrapper(idx):
+            try:
+                await coro_task(idx)
+            finally:
+                semaphore.release()
+                # Restart the same slot
+                task = asyncio.create_task(wrapper(idx))
+                tasks[idx] = task
+                task.add_done_callback(lambda t: tasks.pop(idx, None))
+
+        # Start one task per slot
+        for idx in slots:
+            await semaphore.acquire()
+            task = asyncio.create_task(wrapper(idx))
+            tasks[idx] = task
+            task.add_done_callback(lambda t: tasks.pop(idx, None))
+
+        # Keep the process alive
+        await asyncio.gather(*tasks.values())
     else:
-        count = 0
-        while count < total:
-            # Run coroutines concurrently in batches of 'concurrent'
-            await asyncio.gather(*(coro_task(i) for i in range(concurrent)))
-            count += concurrent
+        semaphore = asyncio.Semaphore(concurrent)
+
+        async def wrapper(i):
+            async with semaphore:
+                await coro_task(i)
+
+        tasks = [asyncio.create_task(wrapper(i)) for i in range(total)]
+        await asyncio.gather(*tasks)
 
 
 

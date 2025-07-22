@@ -10,6 +10,7 @@ import httpx
 import whisper
 from playwright.async_api import Page, FrameLocator, Locator
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
+from human_interaction import HumanInteraction # import your class here
 
 class RecaptchaAudioSolver:
     """
@@ -28,10 +29,9 @@ class RecaptchaAudioSolver:
         self,
         outer_instance: Any,  # The WebshareRegisterer instance
         page: Page,
-        mouse_x: float,
-        mouse_y: float,
         whisper_model: str = "base",
         verbose: bool = False,
+        human_interaction_arg: HumanInteraction | None = None,
     ):
         """
         Initializes the solver.
@@ -45,23 +45,13 @@ class RecaptchaAudioSolver:
             whisper_model: The name of the Whisper model to use for transcription.
             verbose: If True, enables detailed logging.
         """
-        self.outer_instance = outer_instance
+        # self.outer_instance = outer_instance
         self.page = page
         self.verbose = verbose
-        self.logger = outer_instance.logger
-
-        # self.logger.propagate = False
-        # if not self.logger.handlers:
-        #     handler = logging.StreamHandler()
-        #     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        #     handler.setFormatter(formatter)
-        #     self.logger.addHandler(handler)
-
-        # self.logger.setLevel(logging.INFO if verbose else logging.WARNING)
+        self.logger: logging.Logger = outer_instance.logger
+        self.human_interaction = HumanInteraction(logger=self.logger) if human_interaction_arg is None else human_interaction_arg
 
         self.model = whisper.load_model(whisper_model)
-        self.mouse_x = mouse_x
-        self.mouse_y = mouse_y
 
     async def solve(self) -> tuple[float, float]:
         """
@@ -108,12 +98,11 @@ class RecaptchaAudioSolver:
 
     async def _solve_audio_challenge(self, frame: FrameLocator, max_retries: int = 3):
         try:
-            await frame.locator(self._AUDIO_BUTTON_SELECTOR).wait_for(timeout=5000)
+            await frame.locator(self._AUDIO_BUTTON_SELECTOR).wait_for(timeout=10000)
             self.logger.info("Switching to audio challenge...")
             audio_btn_locator = frame.locator(self._AUDIO_BUTTON_SELECTOR)
-            self.mouse_x, self.mouse_y = await self.outer_instance._human_like_mouse_move(self.page, audio_btn_locator, self.mouse_x, self.mouse_y)
+            await self.human_interaction.human_like_mouse_move(self.page, audio_btn_locator)
             await audio_btn_locator.click()
-            await self.outer_instance._random_delay(1, 0.3)
         except Exception as e:
             self.logger.critical(f"Could not find or click button to switch to audio challenge: {e}") 
             return False
@@ -122,7 +111,7 @@ class RecaptchaAudioSolver:
             try:
                 self.logger.info(f"Audio challenge attempt {attempt + 1}/{max_retries}")
                 if await self._check_if_caught(frame):
-                    self.logger.info(f"❌ Couldn't evade bot detection returning without solving")
+                    self.logger.error(f"❌ Couldn't evade bot detection returning without solving")
                     return False
                 audio_bytes = await self._download_audio(frame)
                 transcribed_text = self._transcribe_audio(audio_bytes)
@@ -133,17 +122,15 @@ class RecaptchaAudioSolver:
                     reload_button = frame.locator('#recaptcha-reload-button')
                     if await reload_button.is_visible():
                         await reload_button.click()
-                    await self.outer_instance._random_delay(2, 0.5)
                     continue
 
                 response_input_locator = frame.locator(self._AUDIO_RESPONSE_INPUT_SELECTOR)
-                await self.outer_instance._human_like_type(response_input_locator, transcribed_text)
-                await self.outer_instance._random_delay()
+                await self.human_interaction.human_like_type(self.page, response_input_locator, transcribed_text)
 
                 verify_btn_locator = frame.locator(self._VERIFY_BUTTON_SELECTOR)
-                self.mouse_x, self.mouse_y = await self.outer_instance._human_like_mouse_move(self.page, verify_btn_locator, self.mouse_x, self.mouse_y)
+                await self.human_interaction.human_like_mouse_move(self.page, verify_btn_locator)
                 await verify_btn_locator.click()
-                await self.outer_instance._random_delay(2, 0.4)  # Wait for verification
+                await asyncio.sleep(2)
 
                 if await self._is_solved():
                     self.logger.info("Captcha solved successfully.")
@@ -159,7 +146,7 @@ class RecaptchaAudioSolver:
 
     async def _download_audio(self, frame: FrameLocator) -> bytes:
         download_link = frame.locator(self._AUDIO_DOWNLOAD_LINK_SELECTOR)
-        await download_link.wait_for(timeout=10000)
+        await download_link.wait_for(timeout=50000)
         audio_url = await download_link.get_attribute('href')
         if not audio_url:
             raise ValueError("Could not find href for audio download.")
@@ -169,7 +156,7 @@ class RecaptchaAudioSolver:
             return response.content
 
     def _transcribe_audio(self, audio_bytes: bytes) -> str:
-        temp_file_path = f"temp_audio_{random.randint(1000,9999)}.mp3"
+        temp_file_path = f"temp_audio_{random.randint(1000,999999)}.mp3"
         try:
             with open(temp_file_path, "wb") as f:
                 f.write(audio_bytes)
