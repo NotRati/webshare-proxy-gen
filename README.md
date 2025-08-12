@@ -38,20 +38,6 @@ Install the required Python packages using `uv`:
 uv pip install -r requirements.txt
 ```
 
-Ensure `requirements.txt` includes necessary packages like:
-- `selenium`
-- `webdriver-manager`
-- `requests`
-- `tkinter` (for GUI mode)
-
-Example `requirements.txt`:
-```
-selenium>=4.9.0
-webdriver-manager>=3.8.5
-requests>=2.28.0
-tkinter>=0.1.0
-```
-
 ### 4. Configure Environment
 Create a `.env` file in the project root to store your Webshare API key:
 ```bash
