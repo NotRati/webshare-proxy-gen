@@ -38,16 +38,6 @@ Install the required Python packages using `uv`:
 uv pip install -r requirements.txt
 ```
 
-### 4. Configure Environment
-Create a `.env` file in the project root to store your Webshare API key:
-```bash
-touch .env
-```
-Add the following content:
-```
-WEBSHARE_API_KEY=your_webshare_api_key_here
-```
-
 ## Running the Bot
 
 ### CLI Mode
@@ -78,3 +68,4 @@ The GUI provides an intuitive interface to configure settings and monitor progre
 
 ## Troubleshooting
 - **Selenium Errors**: Ensure the correct browser driver (e.g., Chrome
+
