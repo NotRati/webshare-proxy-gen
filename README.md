@@ -66,6 +66,3 @@ uv run gui.py
 
 The GUI provides an intuitive interface to configure settings and monitor progress.
 
-## Troubleshooting
-- **Selenium Errors**: Ensure the correct browser driver (e.g., Chrome
-
