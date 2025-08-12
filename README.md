@@ -15,7 +15,6 @@ Before running the bot, ensure you have the following installed:
 - **Python 3.8+**: Download from [python.org](https://www.python.org/downloads/)
 - **Git**: For cloning the repository ([installation guide](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
 - **uv**: A Python package manager for faster dependency installation ([uv installation](https://github.com/astral-sh/uv))
-- A Webshare account with API access
 - Compatible browser (Chrome or Firefox) for Selenium automation
 
 ## Installation
@@ -65,4 +64,5 @@ uv run gui.py
 ```
 
 The GUI provides an intuitive interface to configure settings and monitor progress.
+
 
