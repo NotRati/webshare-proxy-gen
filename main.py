@@ -1,29 +1,22 @@
-# webshare_registerer.py
-# https://relay.firefox.com/accounts/profile/? #TODO
+# main.py
 import asyncio
 import logging
 import random
 import os
-import math
 import json
 import string
 # import win32gui, win32con, win32process
 from time import time
-from typing import Dict, Any, Optional
-import re
-import psutil
+from typing import Optional
 import argparse
 import traceback
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import proxy_checker
 from playwright_stealth import Stealth
-from bs4 import BeautifulSoup
 import httpx
-import numpy as np
-from playwright.async_api import async_playwright, Page, FrameLocator, Locator, BrowserContext
+from playwright.async_api import async_playwright, Page, BrowserContext
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
-from scipy.interpolate import PchipInterpolator
 from human_interaction import HumanInteraction
 
 # Import the separated solver class
@@ -345,54 +338,6 @@ class WebshareRegisterer:
 
                 self.logger.info("Navigating to Webshare registration page...")
                 await self._page.goto(self.WEBSSHARE_REGISTER_URL, wait_until="domcontentloaded", timeout=60000)
-                await self._page.evaluate("""
-() => {
-  // 1. Check if a cursor already exists to avoid creating multiple.
-  if (document.getElementById('python-playwright-cursor')) {
-    return;
-  }
-
-  // 2. Create the div element for our cursor.
-  const cursorDiv = document.createElement('div');
-  cursorDiv.id = 'python-playwright-cursor'; // Give it a unique ID
-
-  // 3. Apply all the necessary styles directly.
-  Object.assign(cursorDiv.style, {
-    // Use 'fixed' positioning to place it relative to the viewport.
-    position: 'fixed',
-    top: '0px',
-    left: '0px',
-
-    // Visual appearance (let's make it green this time).
-    width: '25px',
-    height: '25px',
-    backgroundColor: 'rgba(0, 200, 100, 0.5)',
-    border: '2px solid darkgreen',
-    borderRadius: '50%',
-
-    // CRITICAL: Center the div on the actual cursor point.
-    transform: 'translate(-50%, -50%)',
-
-    // CRITICAL: Allow clicks and other events to pass through to elements underneath.
-    pointerEvents: 'none',
-
-    // Ensure the cursor is on top of all other content.
-    zIndex: '9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999'
-  });
-
-  // 4. Append the new div to the body of the document.
-  document.body.appendChild(cursorDiv);
-
-  // 5. Add an event listener to the document to track the mouse.
-  document.addEventListener('mousemove', (event) => {
-    // On every move, update the div's 'left' and 'top' style properties.
-    // This provides the raw, unsmoothed tracking as requested.
-    cursorDiv.style.left = `${event.clientX}px`;
-    cursorDiv.style.top = `${event.clientY}px`;
-  });
-}
-
-                """)
                 # await self._page.mouse.move(self._mouse_x, self._mouse_y)
                 
                 self.logger.info("Filling out email input.")
@@ -499,32 +444,23 @@ async def run_gui_instance(headless: bool, instance_id: str, concurrent: int = 1
             logger.info("---DONE LOGGER---")
 
     semaphore = asyncio.Semaphore(concurrent)
-    
 
     if total == -1:
-        slots = list(range(concurrent))  # Fixed slot indices
         semaphore = asyncio.Semaphore(concurrent)
-        tasks = {}
 
         async def wrapper(idx):
-            try:
-                await coro_task(idx)
-            finally:
-                semaphore.release()
-                # Restart the same slot
-                task = asyncio.create_task(wrapper(idx))
-                tasks[idx] = task
-                task.add_done_callback(lambda t: tasks.pop(idx, None))
+            while True:
+                async with semaphore:  # safe acquire/release
+                    try:
+                        await coro_task(idx)
+                    except Exception as e:
+                        print(f"Task {idx} crashed: {e}")
 
         # Start one task per slot
-        for idx in slots:
-            await semaphore.acquire()
-            task = asyncio.create_task(wrapper(idx))
-            tasks[idx] = task
-            task.add_done_callback(lambda t: tasks.pop(idx, None))
+        tasks = [asyncio.create_task(wrapper(idx)) for idx in range(concurrent)]
 
         # Keep the process alive
-        await asyncio.gather(*tasks.values())
+        await asyncio.gather(*tasks)
     else:
         semaphore = asyncio.Semaphore(concurrent)
 
